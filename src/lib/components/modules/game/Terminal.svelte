@@ -19,6 +19,7 @@ let cmdOpts = {
 	minimumContrastRatio: 7,
 };
 let cmdCfg = {
+	acceptedCharacters: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;':,.<>/?`~ ",
 	lineStart: "> ",
 	cursorDel: "\b \b",
 	cursorLeft: "\u001B[1D",
@@ -63,11 +64,21 @@ async function onLoad() {
 	// game.zork.init();
 }
 
-function onData(data) {
+// handle character input
+function onData(o) {
 
-	console.log("onData()", data);
+	if(cmdCfg.acceptedCharacters.indexOf(o) <= -1) return;
+
+	command += o;
+
+	cmd.write(o);
+
+	console.log("onData()", o);
+
+	return;
 }
 
+// handle functions
 function onKey({ key, domEvent }) {
 
 	if(lock) return;
@@ -94,9 +105,7 @@ function onKey({ key, domEvent }) {
 	// max length string
 	if(command.length >= MAX_INPUT_LENGTH) return;
 
-	command += key;
-
-	cmd.write(key);
+	// cmd.write(key);
 }
 
 function backspace() {
@@ -139,23 +148,41 @@ function prompt() {
 		return;
 	}
 
-	// add some function calls
-	if(cmdOutput?.type === "cmdFn") {
+	// sometimes these are arrays, for multiple commands
+	let cmdRun = cmdOutput[0] || cmdOutput;
 
-		switch(cmdOutput.cmd) {
+	// add some function calls
+	if(cmdRun.type === "cmdFn" || cmdRun.type === "secondary") {
+
+		switch(cmdRun.cmd) {
 			case "clear":
 				cmd.clear();
+				cmd.write("\r\n");
 				cmd.write(cmdCfg.lineStart);
 				return;
 			case "init":
 				cmd.reset();
 				return;
+			// Play a game
+			case "play":
+
+				if(!cmdOutput[1]) {
+					cmd.write(`${cmdRun?.name || cmdRun.cmd} what?`);
+					resetCmd();
+					return;
+				}
+
+				cmd.write(`Loading ${cmdOutput[1]?.name || cmdOutput[1].cmd}...`);
+
+				// TODO: run a callback from the game initilizer to clear() then write the game script
+
+				return;
 			// Navigation items
 			case "home":
-				goto(`/`);
+				if(page.url.pathname !== `/`) goto(`/`);
 				break;
 			case "about":
-				goto(`/${cmdOutput.cmd}`);
+				if(page.url.pathname !== `/${cmdRun.cmd}`) goto(`/${cmdRun.cmd}`);
 				break;
 			default:
 				break;
@@ -180,7 +207,7 @@ function prompt() {
 }
 
 onMount(() => {
-	// Maybe move onLoad here?
+	// TODO: Maybe move onLoad here?
 });
 </script>
 

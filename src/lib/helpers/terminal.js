@@ -72,6 +72,12 @@ export const cfg = {
 		// hidden output
 		{ match: ["unknown"], cmd: "unknown", type: "hiddenOutput", description: "Unknown command message" },
 		{ match: ["hello", "hey", "hi"], cmd: "hello", type: "hiddenOutput", description: "Display this help message" },
+		// secondary triggers
+		{ match: ["play"], name: "Play", cmd: "play", type: "secondary", description: "Play <*>" },
+	],
+	secondaryCommands: [
+		// play "cmd"
+		{ match: ["zork"], top: "play", cmd: "zork", lvl: "secondary", description: "Play Zork" },
 	],
 	/**
 	 * Process string output to properly split on line width
@@ -101,9 +107,11 @@ export let terminal = {
 
 		// find the first word that's valid
 		let firstWord;
+		let firstWordIndex;
 		let command;
 
 		for(let i = 0; i < splitCmd.length; i++) {
+			firstWordIndex = i;
 			firstWord = splitCmd[i].toLowerCase();
 			command = cfg.visibleCommands.find((cmd) => cmd.match.includes(firstWord));
 
@@ -111,6 +119,21 @@ export let terminal = {
 		}
 
 		if(!command) return false;
+
+		/** These will run secondary commands */
+		if(command.type === "secondary") {
+
+			let secondWord = splitCmd[firstWordIndex + 1]?.toLowerCase();
+			let secondCommand = cfg.secondaryCommands.find((cmd) => cmd.match.includes(secondWord));
+
+			console.log("SECONDARY", command);
+
+			if(!secondWord || !secondCommand) return command;
+
+			console.log("SECONDARY", secondCommand);
+
+			return [command, secondCommand];
+		}
 
 		if(command.type === "output" || command.type === "hiddenOutput") {
 			let txt = this.output[command.cmd];
@@ -136,7 +159,7 @@ export let terminal = {
 	],
 	output: {
 		init: `Hello!${cfg.newLineFull}I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, and I've been a director of technology and${cfg.newLine}digital strategist for ${(new Date().getFullYear()) - 2010}+ years with a focus on user experience,${cfg.newLine}e-commerce, and team development.`,
-		help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
+		help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
 		hello: [
 			"Hey there!",
 			"Hi!",
