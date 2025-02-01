@@ -41,5 +41,9 @@ You can preview the production build with `npm run preview`.
 
 ### Shadcn-Svelte
 ```
-npx shadcn-svelte@next add accordion alert alert-dialog aspect-ratio avatar badge breadcrumb button calendar card carousel checkbox collapsible combobox command context-menu data-table date-picker dialog drawer dropdown-menu form hover-card input input-otp label menubar pagination popover progress radio-group range-calendar scroll-area select separator sheet skeleton slider sonner switch table tabs textarea toggle toggle-group tooltip
+npx shadcn-svelte@next add
+```
+OR
+```
+npx shadcn-svelte@next update accordion alert alert-dialog aspect-ratio avatar badge breadcrumb button calendar card carousel checkbox collapsible combobox command context-menu data-table date-picker dialog drawer dropdown-menu form hover-card input input-otp label menubar pagination popover progress radio-group range-calendar scroll-area select separator sheet skeleton slider sonner switch table tabs textarea toggle toggle-group tooltip
 ```
