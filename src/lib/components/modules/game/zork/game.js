@@ -1,3 +1,4 @@
+import Game from "../Game.js";
 import { Item, Player, Room } from "./classes.js";
 import {
 	ACTIONS,
@@ -10,10 +11,13 @@ import {
 	TEXT_BOLD,
 	TEXT_NORMAL
 } from "./constants";
+import { cfg } from "$lib/helpers/terminal.js";
 
-class Zork {
+class Zork extends Game {
 
 	constructor() {
+
+		super();
 
 		this.itemArray = [];
 		this.itemObjects = {};
@@ -21,27 +25,39 @@ class Zork {
 		this.currentInput = "";
 		this.previousInput = "";
 
-		/** Asset load */
+		this.cfg = cfg;
+	}
+
+	/** our asset loader */
+	async assetLoad() {
+
+		// ... sync items
 		this.loadItems();
 		this.loadRooms();
 
+		this.player = new Player();
+
+		return new Promise(async (resolve) => {
+
+			// ... await items
+
+			resolve();
+		});
 	}
 
 	init() {
 
-		console.log("ACTION_PHRASES", ACTION_PHRASES);
+		this.cmd.write(this.cfg.newLineFull);
 
-		this.player = new Player();
 		this.player.loadPlayerState();
 
 		if(this.player.gameIsSaved) {
-			this.terminal.write(OUTPUT_LISTS.saveLoaded);
-			this.terminal.write(LINE_BREAK);
+			this.cmd.write(OUTPUT_LISTS.saveLoaded);
+			this.cmd.write(cfg.newLineFull);
 		}
 
-		this.terminal.write(OUTPUT_LISTS.titleScreen);
-		this.terminal.write(LINE_BREAK);
-		this.terminal.write(LINE_BREAK);
+		this.cmd.write(OUTPUT_LISTS.titleScreen);
+		this.cmd.write(cfg.newLineFull);
 
 		this.lookAction();
 	}
@@ -75,7 +91,7 @@ class Zork {
 			"forest_four": new Room("forest_four", "Forest", `The forest thins out, revealing impassable mountains.`, [], false),
 			"stormTossed": new Room("stormTossed", "Forest", `Storm-tossed trees block your way.`, [], false),
 			"southOfHouse": new Room("southOfHouse", "South of House", `You are facing the south side of a white house.${LINE_BREAK}There is no door here, and all the windows are boarded`, [], false),
-			"westOfHouse": new Room("westOfHouse", `${TEXT_BOLD}West of House${TEXT_NORMAL}`, `This is an open field west of a white house, with a boarded front door.${LINE_BREAK + LINE_BREAK}There is a small mailbox here.`, [this.itemObjects.mat], false),
+			"westOfHouse": new Room("westOfHouse", `${TEXT_BOLD}West of House${TEXT_NORMAL}`, `This is an open field west of a white house, with a boarded front door.${LINE_BREAK + LINE_BREAK}There is a small mailbox here.`, [], false),
 			"behindHouse": new Room("behindHouse", "Behind House", `You are behind the white house. A path leads into the forest to the east. ${LINE_BREAK}In one corner of the house there is a small window which is slightly ajar.`, [], false),
 			"windowBehindHouse": new Room("windowBehindHouse", "Behind House", `You are behind the white house. A path leads into the forest to the east. ${LINE_BREAK}In one corner of the house there is a small window which is open.`, [], false),
 			"kitchen": new Room("kitchen", "Kitchen", `You are in the kitchen of a the white house. A table seems to have been used recently for the${LINE_BREAK}preparation of food. A passage leads to the west and a dark staircase can be seen leading upward.${LINE_BREAK}A dark chimney leads down and to the east is a small window which is open.`, [this.itemObjects.sack, this.itemObjects.bottle], false),
@@ -194,13 +210,13 @@ class Zork {
 
 	saveGame() {
 		this.player.savePlayerState();
-		this.terminal.write(OUTPUT_LISTS.gameSaved);
+		this.cmd.write(OUTPUT_LISTS.gameSaved);
 		this.setNewCommand();
 	}
 
 	resetGame() {
 		this.player.resetPlayerState();
-		this.terminal.write(OUTPUT_LISTS.gameReset);
+		this.cmd.write(OUTPUT_LISTS.gameReset);
 		this.setNewCommand();
 	}
 
@@ -208,9 +224,11 @@ class Zork {
 
 		let hackRE = /<*>/g;
 
+		this.cmd.write(cfg.newLineFull);
+
 		if(text.match(hackRE)) {
 
-			this.terminal.write("You're not trying to do something tricky, are you?");
+			this.cmd.write("You're not trying to do something tricky, are you?");
 			this.setNewCommand();
 			callback();
 			return;
@@ -225,23 +243,23 @@ class Zork {
 
 		this.parseInput();
 
-		// let cmd = text.toUpperCase();
+		let cmd = text.toUpperCase();
 
-		// cmd = cmd.split(/(\s+)/).filter(e => e.trim().length > 0);
+		cmd = cmd.split(/(\s+)/).filter(e => e.trim().length > 0);
 
-		// for(var i = 0; i < cmd.length; i++) {
+		for(var i = 0; i < cmd.length; i++) {
 
-		// 	if(!this.validateCommand(cmd[i])) {
-		// 		this.invalidCommand();
-		// 		callback();
-		// 		return;
-		// 	}
-		// }
+			if(!this.validateCommand(cmd[i])) {
+				this.invalidCommand();
+				callback();
+				return;
+			}
+		}
 
-		// let executableCommand = cmd[0];
-		// let commandArgument = (cmd[1]) ? cmd[1] : null;
+		let executableCommand = cmd[0];
+		let commandArgument = (cmd[1]) ? cmd[1] : null;
 
-		// this.executeCommand(executableCommand, commandArgument);
+		this.executeCommand(executableCommand, commandArgument);
 
 		callback();
 	}
@@ -255,7 +273,7 @@ class Zork {
 		}
 
 		if(!this.parseAction(input)) {
-			this.terminal.write(OUTPUT_LISTS.invalidCommand);
+			this.cmd.write(OUTPUT_LISTS.invalidCommand);
 			this.setNewCommand();
 			return;
 		}
@@ -277,7 +295,7 @@ class Zork {
 
 				this.updateMultiple();
 			} else {
-				this.terminal.write("I can't understand that.");
+				this.cmd.write("I can't understand that.");
 				this.setNewCommand();
 				return;
 			}
@@ -299,7 +317,7 @@ class Zork {
 			this.currentInput = this.previousInput;
 
 			if(this.currentInput === "") {
-				this.terminal.write(OUTPUT_LISTS.noPreviousCommand);
+				this.cmd.write(OUTPUT_LISTS.noPreviousCommand);
 				this.setNewCommand();
 				return false;
 			}
@@ -316,7 +334,7 @@ class Zork {
 			for(let i = 0; i < inputWords.length; i++) {
 
 				if(!this.isGameWord(inputWords[i])) {
-					this.terminal.write(`I don't know what "${inputWords[i]}" means.`);
+					this.cmd.write(`I don't know what "${inputWords[i]}" means.`);
 					this.setNewCommand();
 					return false;
 				}
@@ -333,19 +351,19 @@ class Zork {
 		let input = this.currentInput;
 
 		if(this.isEmpty(input)) {
-			this.terminal.write(OUTPUT_LISTS.emptyCommand);
+			this.cmd.write(OUTPUT_LISTS.emptyCommand);
 			this.setNewCommand();
 			return true;
 		}
 
 		if(input === "author" || input === "about") {
-			this.terminal.write(OUTPUT_LISTS.aboutGame);
+			this.cmd.write(OUTPUT_LISTS.aboutGame);
 			this.setNewCommand();
 			return true;
 		}
 
 		if(input === "bug") {
-			this.terminal.write(OUTPUT_LISTS.bugReport);
+			this.cmd.write(OUTPUT_LISTS.bugReport);
 			this.setNewCommand();
 			return true;
 		}
@@ -356,22 +374,22 @@ class Zork {
 
 			switch(choice) {
 				case 0:
-					this.terminal.write("Hello.");
+					this.cmd.write("Hello.");
 					break;
 				case 1:
-					this.terminal.write("Hi.");
+					this.cmd.write("Hi.");
 					break;
 				case 2:
-					this.terminal.write("Hey.");
+					this.cmd.write("Hey.");
 					break;
 				case 3:
-					this.terminal.write("Greetings.");
+					this.cmd.write("Greetings.");
 					break;
 				case 4:
-					this.terminal.write("Good day.");
+					this.cmd.write("Good day.");
 					break;
 				case 5:
-					this.terminal.write("Nice weather we've been having lately.");
+					this.cmd.write("Nice weather we've been having lately.");
 					break;
 				default:
 					break;
@@ -386,7 +404,7 @@ class Zork {
 		input = " " + input + " ";
 
 		if(/\sfuck\s|\sshit\s|\sdamn\s|\shell\s|\sass\s/.test(input)) {
-			this.terminal.write("Such language in a high-class establishment like this!");
+			this.cmd.write("Such language in a high-class establishment like this!");
 			this.setNewCommand();
 			return true;
 		}
@@ -399,13 +417,13 @@ class Zork {
 		}
 
 		if(input === "xyzzy" || input === "plugh") {
-			this.terminal.write("A hollow voice says 'Fool.'");
+			this.cmd.write("A hollow voice says 'Fool.'");
 			this.setNewCommand();
 			return true;
 		}
 
 		if(input === "zork") {
-			this.terminal.write("At your service!");
+			this.cmd.write("At your service!");
 			this.setNewCommand();
 			return true;
 		}
@@ -422,7 +440,7 @@ class Zork {
 				this.player.state.loudRoomSolved = true;
 				++this.player.state.turns;
 
-				this.terminal.write(MAP_STRINGS.LOUD_ROOM_CHANGE);
+				this.cmd.write(MAP_STRINGS.LOUD_ROOM_CHANGE);
 				this.setNewCommand();
 
 				return true;
@@ -441,7 +459,7 @@ class Zork {
 
 					return true;
 				default:
-					this.terminal.write(`${lastWord} ${lastWord} ...`);
+					this.cmd.write(`${lastWord} ${lastWord} ...`);
 					this.setNewCommand();
 					break;
 
@@ -539,7 +557,7 @@ class Zork {
 
 	invalidCommand() {
 
-		this.terminal.write("Oh no, that doesn't look right!");
+		this.cmd.write("Oh no, that doesn't look right!");
 		this.setNewCommand();
 	}
 
@@ -604,18 +622,17 @@ class Zork {
 	}
 
 	setNewCommand() {
-		this.terminal.write(LINE_BREAK);
-		this.terminal.write(LINE_BREAK);
-		this.terminal.write(this.terminalConfig.lineStart);
+		this.cmd.write(cfg.newLineFull);
+		this.cmd.write(cfg.lineStart);
 	}
 
 	printHelp() {
 
-		this.terminal.write(OUTPUT_LISTS.acceptableCommands);
+		this.cmd.write(OUTPUT_LISTS.acceptableCommands);
 
 		OUTPUT_LISTS.acceptableCommandList.forEach(command => {
-			this.terminal.write(LINE_BREAK);
-			this.terminal.write(command);
+			this.cmd.write(LINE_BREAK);
+			this.cmd.write(command);
 		});
 
 		this.setNewCommand();
@@ -626,16 +643,16 @@ class Zork {
 		let inventory = this.player.getPlayerInventory();
 
 		if(inventory === undefined || inventory.length <= 0) {
-			this.terminal.write(OUTPUT_LISTS.emptyBag);
+			this.cmd.write(OUTPUT_LISTS.emptyBag);
 			this.setNewCommand();
 			return;
 		}
 
-		this.terminal.write(OUTPUT_LISTS.bagContains);
+		this.cmd.write(OUTPUT_LISTS.bagContains);
 
 		inventory.forEach(item => {
-			this.terminal.write(LINE_BREAK);
-			this.terminal.write(item);
+			this.cmd.write(LINE_BREAK);
+			this.cmd.write(item);
 		});
 
 		this.setNewCommand();
@@ -643,13 +660,13 @@ class Zork {
 
 	setVerboseOutput() {
 		this.player.setVerboseMode(true);
-		this.terminal.write(OUTPUT_LISTS.verboseMode);
+		this.cmd.write(OUTPUT_LISTS.verboseMode);
 		this.setNewCommand();
 	}
 
 	setBriefOutput() {
 		this.player.setVerboseMode(false);
-		this.terminal.write(OUTPUT_LISTS.briefMode);
+		this.cmd.write(OUTPUT_LISTS.briefMode);
 		this.setNewCommand();
 	}
 
@@ -668,24 +685,28 @@ class Zork {
 
 		if(!this.roomList[currentRoom].roomIsDark) {
 
-			this.terminal.write(this.roomList[currentRoom].name);
-			this.terminal.write(LINE_BREAK);
-			this.terminal.write(this.roomList[currentRoom].look);
-			this.terminal.write(LINE_BREAK);
+			this.cmd.write(this.roomList[currentRoom].name);
+			this.cmd.write(cfg.newLineFull);
+			this.cmd.write(this.roomList[currentRoom].look);
 
 			this.showItems(this.roomList[currentRoom]);
 		}
+
+		this.setNewCommand();
 	}
 
 	showItems(room) {
+
+		if(room.items.length === 0) return;
 
 		let itemList = [];
 
 		room.items.forEach(item => {
 
 			if(item.specialdesc) {
-				this.terminal.write(item.specialdesc);
-				this.terminal.write(LINE_BREAK);
+
+				this.cmd.write(item.specialdesc);
+
 				return;
 			}
 
@@ -693,13 +714,15 @@ class Zork {
 		});
 
 		if(itemList.length === 1) {
-			this.terminal.write(`There is a ${itemList[0]} here.`);
-			this.setNewCommand();
+
+			this.cmd.write(cfg.newLine);
+			this.cmd.write(`There is a ${itemList[0]} here.`);
+
 			return;
 		}
 
-		this.terminal.write(`There is a ${itemList.join(", ")} here:`);
-		this.setNewCommand();
+		this.cmd.write(cfg.newLine);
+		this.cmd.write(`There is a ${itemList.join(", ")} here.`);
 	}
 
 	goAction(direction) {
@@ -718,7 +741,7 @@ class Zork {
 		} else {
 
 			if(this.roomList[currentRoom][lDirection] === undefined) {
-				this.terminal.write(OUTPUT_LISTS.invalidDirection);
+				this.cmd.write(OUTPUT_LISTS.invalidDirection);
 				this.setNewCommand();
 				return;
 			}
@@ -729,8 +752,8 @@ class Zork {
 		}
 
 		if(this.player.getVerboseMode() && currentRoom.visited) {
-			this.terminal.write(this.roomList[currentRoom].name);
-			this.terminal.write(LINE_BREAK);
+			this.cmd.write(this.roomList[currentRoom].name);
+			this.cmd.write(LINE_BREAK);
 			this.showItems(this.roomList[currentRoom]);
 		}
 
@@ -749,7 +772,7 @@ class Zork {
 		let currentRoom = this.getCurrentRoom();
 
 		if(this.roomList[currentRoom]["open"] === undefined || !this.roomList[currentRoom]["open"]) {
-			this.terminal.write(OUTPUT_LISTS.notOpenable);
+			this.cmd.write(OUTPUT_LISTS.notOpenable);
 			this.setNewCommand();
 			return;
 		}
@@ -760,8 +783,8 @@ class Zork {
 		currentRoom = this.getCurrentRoom();
 
 		if(this.player.getVerboseMode() && currentRoom.visited) {
-			this.terminal.write(this.roomList[currentRoom].name);
-			this.terminal.write(LINE_BREAK);
+			this.cmd.write(this.roomList[currentRoom].name);
+			this.cmd.write(LINE_BREAK);
 			this.showItems(this.roomList[currentRoom]);
 		}
 
@@ -777,19 +800,19 @@ class Zork {
 		let currentRoom = this.getCurrentRoom();
 
 		if(!roomList[currentRoom].items.includes(itemObject)) {
-			this.terminal.write(`A ${lItem} does not exist here.`);
+			this.cmd.write(`A ${lItem} does not exist here.`);
 			this.setNewCommand();
 			return;
 		}
 
 		if(this.player.inventory[itemObject]) {
-			this.terminal.write(`The ${lItem} is already in your bag.`);
+			this.cmd.write(`The ${lItem} is already in your bag.`);
 			this.setNewCommand();
 			return;
 		}
 
 		this.player.addToInventory(lItem);
-		this.terminal.write(`You put the ${lItem} in your bag.`);
+		this.cmd.write(`You put the ${lItem} in your bag.`);
 		this.setNewCommand();
 	}
 
@@ -799,18 +822,18 @@ class Zork {
 		let itemObject = this.itemObjects[lItem];
 
 		if(!this.player.inventory.includes(lItem)) {
-			this.terminal.write(`You don't own a ${lItem} to read.`);
+			this.cmd.write(`You don't own a ${lItem} to read.`);
 			this.setNewCommand();
 			return;
 		}
 
 		if(!itemObject.actionArray.includes("read")) {
-			this.terminal.write(OUTPUT_LISTS.notReadable);
+			this.cmd.write(OUTPUT_LISTS.notReadable);
 			this.setNewCommand();
 			return;
 		}
 
-		this.terminal.write(itemObject.contents);
+		this.cmd.write(itemObject.contents);
 		this.setNewCommand();
 	}
 
@@ -820,7 +843,7 @@ class Zork {
 		let itemObject = this.itemObjects[lItem];
 
 		if(!this.player.inventory.includes(lItem)) {
-			this.terminal.write(`You don't own a ${lItem} to drop.`);
+			this.cmd.write(`You don't own a ${lItem} to drop.`);
 			this.setNewCommand();
 			return;
 		}
@@ -830,14 +853,14 @@ class Zork {
 		this.roomList[currentRoom].items.push(itemObject);
 
 		this.player.removeFromInventory(lItem);
-		this.terminal.write(`You have dropped the ${lItem}.`);
+		this.cmd.write(`You have dropped the ${lItem}.`);
 		this.setNewCommand();
 	}
 
 	useAction(item) {
 
 		if(!item) {
-			this.terminal.write(OUTPUT_LISTS.notUseable);
+			this.cmd.write(OUTPUT_LISTS.notUseable);
 			this.setNewCommand();
 			return;
 		}
@@ -845,13 +868,13 @@ class Zork {
 		let lItem = item.toLowerCase();
 
 		if(!this.player.inventory.includes(lItem)) {
-			this.terminal.write(`You don't own a ${lItem} to use!`);
+			this.cmd.write(`You don't own a ${lItem} to use!`);
 			this.setNewCommand();
 			return;
 		}
 
 		if(this.itemObjects[lItem].inUse) {
-			this.terminal.write(OUTPUT_LISTS.alreadyInUse);
+			this.cmd.write(OUTPUT_LISTS.alreadyInUse);
 			this.itemObjects[lItem].inUse = false;
 			this.lookAction();
 			return;
@@ -859,7 +882,7 @@ class Zork {
 
 		if(lItem === "egg") {
 
-			this.terminal.write(this.itemObjects[lItem].openDesc);
+			this.cmd.write(this.itemObjects[lItem].openDesc);
 
 			if(this.getCurrentRoom() === "tree") {
 				this.goAction("back");
@@ -868,10 +891,10 @@ class Zork {
 
 		} else {
 
-			this.terminal.write(this.itemObjects[lItem].useDesc);
+			this.cmd.write(this.itemObjects[lItem].useDesc);
 		}
 
-		this.terminal.write(LINE_BREAK);
+		this.cmd.write(LINE_BREAK);
 		this.itemObjects[lItem].inUse = true;
 		this.lookAction();
 	}

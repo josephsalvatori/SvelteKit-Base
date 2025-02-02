@@ -1,3 +1,5 @@
+import { cfg } from "$lib/helpers/terminal.js";
+
 const SAVE_STATE_NAME = "gameZork";
 const LINE_BREAK = "\r\n";
 
@@ -205,7 +207,7 @@ const OUTPUT_LISTS = {
 	emptyCommand: "I beg your pardon?",
 	invalidCommand: "I can't tell what you're trying to do.",
 	noPreviousCommand: "Again what?",
-	titleScreen: `Welcome to ${TEXT_BOLD_YELLOW}ZORK${TEXT_NORMAL}.${LINE_BREAK}Original game by Tim Anderson, Marc Blank, Bruce Daniels, and Dave Lebling.${LINE_BREAK}Ported to JavaScript by Matt Colyer.${LINE_BREAK}Type "help" for a list of commands.${LINE_BREAK}`,
+	titleScreen: `${cfg.colors.yellowBold}ZORK I: The Great Underground Empire.${cfg.colors.reset}${cfg.newLineFull}${cfg.colors.black}Copyright (c) 1981, 1982, 1982 Infocom, Inc. All rights reserved.${cfg.newLine}ZORK is a registered trademark of Infocom, Inc.${cfg.newLine}Revision 89 / Serial Number 840726${cfg.newLineFull}Original game by Tim Anderson, Marc Blank, Bruce Daniels, and Dave Lebling.${cfg.newLine}Latest version by Joseph Salvatori, extended from a JavaScript port by Nate Tryon (https://github.com/PotterOtherP).${cfg.colors.reset}${cfg.newLineFull}Type "help" for a list of commands.`,
 	aboutGame: `Zork I: The Great Underground Empire is a classic computer game developed by${LINE_BREAK}Marc Blank, Dave Lebling, Bruce Daniels, and Tim Anderson at MIT in the late 1970s.${LINE_BREAK}It became the basis of the computer game company Infocom, which published many Zork-related${LINE_BREAK}titles in the 1980s and 1990s, and was acquired by Activision, which still owns the copyright.`,
 	bugReport: "Bug? Maybe in the original program, but not in a flawless remake like this! (Cough, cough.)",
 };

@@ -1,5 +1,5 @@
 <script>
-import { getContext, onMount } from "svelte";
+import { getContext, onMount, tick } from "svelte";
 
 /** @type {import('./$types').PageProps} */
 let { data } = $props();
@@ -8,11 +8,7 @@ let aboutTerminalCopy = `Here is a longer description about me for the terminal.
 
 let terminalCtx = getContext("terminalCtx");
 
-onMount(() => {
+terminalCtx.currentPage = "about";
+terminalCtx.currentPageCopy = aboutTerminalCopy;
 
-	if(terminalCtx.cmd) {
-		terminalCtx.cmd.write(aboutTerminalCopy);
-		terminalCtx.fn.reset();
-	}
-});
 </script>

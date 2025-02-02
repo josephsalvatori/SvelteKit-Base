@@ -1,10 +1,12 @@
 <script>
 import { page } from "$app/state";
-import { goto } from "$app/navigation";
+import { afterNavigate, goto } from "$app/navigation";
 import { getContext, onMount } from "svelte";
+import { innerWidth } from "svelte/reactivity/window";
 import { Xterm, XtermAddon } from "@battlefieldduck/xterm-svelte";
-import { terminal } from "$lib/helpers/terminal.js";
-// import { Zork } from "./zork/game.js";
+import { terminal, cfg } from "$lib/helpers/terminal.js";
+// games
+import { Zork } from "./zork/game.js";
 
 let gameState = getContext("gameState");
 let siteState = getContext("siteState");
@@ -30,9 +32,15 @@ let cmdCfg = {
 
 let command = $state("");
 let previousCmds = $state([]);
-let lock = $state(false);
+let lock = $state(true);
+let lineSize = $derived.by(() => {
+	if(innerWidth.current > 768) return "dk";
+	return "mb";
+});
 
-const MAX_INPUT_LENGTH = 50;
+const MAX_INPUT_LENGTH = 38;
+
+$inspect(lineSize);
 
 /** Terminal Loader */
 async function onLoad() {
@@ -44,18 +52,18 @@ async function onLoad() {
 
 	fitAddon.fit();
 
-	// pass into context
+	/** @type {import('@battlefieldduck/xterm-svelte').Terminal} */
 	terminalCtx.cmd = cmd;
+	terminalCtx.size = lineSize;
 	terminalCtx.cmdCfg = cmdCfg;
 	terminalCtx.fn = {
 		reset: resetCmd
-	}
+	};
+	terminalCtx.loaded = true;
 
 	// set up the initial screen
-	cmd.write("\r\n");
-	cmd.write(terminal.output.init);
-	cmd.write("\r\n\r\n");
-	cmd.write(cmdCfg.lineStart);
+	cmd.write(cfg.newLine);
+	cmd.write(terminal.output[lineSize].init);
 
 	// initialize the terminal
 	// if(!game.zork.terminal) game.zork.terminal = cmd;
@@ -68,6 +76,7 @@ async function onLoad() {
 function onData(o) {
 
 	if(cmdCfg.acceptedCharacters.indexOf(o) <= -1) return;
+	if(command.length >= MAX_INPUT_LENGTH) return;
 
 	command += o;
 
@@ -97,50 +106,59 @@ function onKey({ key, domEvent }) {
 
 	if(domEvent.key === "Enter") {
 
+		if(siteState.mode === "game") {
+
+			gameState[siteState.game].submitCommand(command, () => {
+				command = "";
+			});
+
+			return;
+		}
+
 		prompt();
 
 		return;
 	}
 
-	// max length string
-	if(command.length >= MAX_INPUT_LENGTH) return;
 
-	// cmd.write(key);
 }
 
-function backspace() {
+/** Delete current buffer, up to the prepend */
+const backspace = () => {
 
 	const cursor = cmd._core.buffer.x;
+	const length = (terminalCtx.prepend.length > 10) ? ((terminalCtx.prepend.length - 12) + cmdCfg.lineStart.length) : (terminalCtx.prepend.length + cmdCfg.lineStart.length);
 
-	if(cursor <= cmdCfg.lineStart.length) return;
+	if(cursor <= length) return;
 
 	cmd.write("\b \b");
 
 	command = command.slice(0, -1);
-}
+};
 
-function resetCmd() {
+const resetCmd = (full = true) => {
 
-	cmd.write("\r\n\r\n");
-	cmd.write(cmdCfg.lineStart);
+	cmd.write((full) ? cfg.newLineFull : cfg.newLine);
+	cmd.write(terminalCtx.prepend + cmdCfg.lineStart);
 
 	command = "";
-}
+
+	lock = false;
+};
 
 function prompt() {
 
-	if(command === "") return;
-	// lock = true;
+	if(command === "" || lock === true) return;
 
-	// always add spacing for command output
-	cmd.write("\r\n\r\n");
+	lock = true;
 
-	let cmdOutput = terminal.getOutput(command);
+	let cmdOutput = terminal.getOutput(command, lineSize);
 
 	// bad command
 	if(!cmdOutput) {
 
-		cmd.write(terminal.output.unknown);
+		cmd.write(cfg.newLineFull);
+		cmd.write(terminal.output[lineSize].unknown);
 
 		// reset
 		resetCmd();
@@ -152,37 +170,69 @@ function prompt() {
 	let cmdRun = cmdOutput[0] || cmdOutput;
 
 	// add some function calls
-	if(cmdRun.type === "cmdFn" || cmdRun.type === "secondary") {
+	if(cmdRun.type === "cmdFn" || cmdRun.type === "hiddenFn" || cmdRun.type === "secondaryFn") {
 
 		switch(cmdRun.cmd) {
 			case "clear":
-				cmd.clear();
-				cmd.write("\r\n");
-				cmd.write(cmdCfg.lineStart);
-				return;
+				cmd.reset();
+				resetCmd(false);
+				break;
 			case "init":
 				cmd.reset();
-				return;
-			// Play a game
+				setTimeout(() => {
+					cmd.write(cfg.newLine);
+					cmd.write(terminal.output[lineSize].init);
+					resetCmd();
+				}, 500);
+				break;
+			// Load a game and move into the game state.
 			case "play":
 
-				if(!cmdOutput[1]) {
+				if(!cmdOutput[1]?.cmd) {
+					cmd.write(cfg.newLineFull);
 					cmd.write(`${cmdRun?.name || cmdRun.cmd} what?`);
 					resetCmd();
-					return;
+					break;
 				}
 
-				cmd.write(`Loading ${cmdOutput[1]?.name || cmdOutput[1].cmd}...`);
+				let game = cmdOutput[1].cmd;
+
+				if(!gameState[game]) {
+
+					switch(game) {
+						case "zork":
+							gameState[game] = new Zork(cmd);
+							break;
+						default:
+							return false;
+					}
+
+					cmd.write(cfg.newLineFull);
+					cmd.write(`Loading ${cmdOutput[1]?.name || game}...`);
+
+					console.log(gameState[game]);
+
+					// run the preload function from the game
+					gameState[game].cmd = cmd;
+					gameState[game].preload(() => {
+						lock = false;
+					});
+
+				}
+
+				siteState.mode = "game";
+				siteState.game = game;
+
+				gameState[game].init();
 
 				// TODO: run a callback from the game initilizer to clear() then write the game script
-
-				return;
+				break;
 			// Navigation items
 			case "home":
-				if(page.url.pathname !== `/`) goto(`/`);
+				if(page.url.pathname !== `/`) goto(`/`, { keepfocus: true });
 				break;
 			case "about":
-				if(page.url.pathname !== `/${cmdRun.cmd}`) goto(`/${cmdRun.cmd}`);
+				if(page.url.pathname !== `/${cmdRun.cmd}`) goto(`/${cmdRun.cmd}`, { keepfocus: true });
 				break;
 			default:
 				break;
@@ -191,6 +241,8 @@ function prompt() {
 		return;
 	}
 
+	// always add spacing for command output
+	cmd.write(cfg.newLineFull);
 	cmd.write(cmdOutput);
 
 	// now reset
@@ -206,8 +258,29 @@ function prompt() {
 	// });
 }
 
-onMount(() => {
-	// TODO: Maybe move onLoad here?
+let displayPage = $state(null);
+
+$effect(() => {
+
+	/** Watching for changes on the current page */
+	if(terminalCtx.loaded && terminalCtx.currentPage !== siteState.currentPage) {
+
+		siteState.currentPage = terminalCtx.currentPage;
+		terminalCtx.prepend = terminalCtx.currentPage === "home" ? "" : `${cfg.colors.black}[S:${page.url.pathname.replace("/", "\\")}]${cfg.colors.reset}`;
+
+		if(terminalCtx.currentPageCopy) {
+			terminalCtx.cmd.write(cfg.newLineFull);
+			terminalCtx.cmd.write(terminalCtx.currentPageCopy);
+		}
+
+		terminalCtx.fn.reset();
+		terminalCtx.cmd.focus();
+	}
+});
+
+// SvelteKit Navigation focus fix
+afterNavigate(() => {
+	if(terminalCtx.loaded) terminalCtx.cmd.focus();
 });
 </script>
 

@@ -4,16 +4,11 @@ import { getContext, onMount } from "svelte";
 /** @type {import('./$types').PageProps} */
 let { data } = $props();
 
-let homeTerminalCopy = `Home Page.`;
+let homeTerminalCopy = `Here is some home page copy.`;
 
 let terminalCtx = getContext("terminalCtx");
 
-onMount(() => {
+terminalCtx.currentPage = "home";
+terminalCtx.currentPageCopy = homeTerminalCopy;
 
-	if(terminalCtx.cmd) {
-		terminalCtx.cmd.write(homeTerminalCopy);
-		terminalCtx.fn.reset();
-		terminalCtx.cmd?.focus();
-	}
-});
 </script>

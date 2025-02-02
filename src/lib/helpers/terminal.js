@@ -1,5 +1,5 @@
 export const cfg = {
-
+	lineStart: "> ",
 	newLine: "\r\n",
 	newLineFull: "\r\n\r\n",
 	tab: "\t",
@@ -62,22 +62,22 @@ export const cfg = {
 	 */
 	visibleCommands: [
 		// output
-		{ match: ["help", "h", "?"], cmd: "help", type: "output", description: "Display this help message" },
+		{ match: ["help", "h", "?"], cmd: "help", type: "output", description: `display this help message` },
 		// functions
-		{ match: ["clear"], cmd: "clear", type: "cmdFn", description: "Clear the terminal" },
-		{ match: ["home"], cmd: "home", type: "cmdFn", description: "Home page" },
-		{ match: ["about"], cmd: "about", type: "cmdFn", description: "More about me" },
+		{ match: ["clear", "erase"], cmd: "clear", type: "cmdFn", description: `clear the terminal` },
+		{ match: ["home"], cmd: "home", type: "cmdFn", description: `Home page` },
+		{ match: ["about"], cmd: "about", type: "cmdFn", description: `More about me` },
 		// hidden functions
-		{ match: ["init"], cmd: "init", type: "hiddenFn", description: "Initialize the terminal" },
+		{ match: ["init", "reboot"], cmd: "init", type: "hiddenFn", description: `Reboot the terminal` },
 		// hidden output
-		{ match: ["unknown"], cmd: "unknown", type: "hiddenOutput", description: "Unknown command message" },
-		{ match: ["hello", "hey", "hi"], cmd: "hello", type: "hiddenOutput", description: "Display this help message" },
+		{ match: ["unknown"], cmd: "unknown", type: "hiddenOutput", description: `Unknown command message` },
+		{ match: ["hello", "hey", "hi", "sup", "wassup"], cmd: "hello", type: "hiddenOutput", description: `Display this help message` },
 		// secondary triggers
-		{ match: ["play"], name: "Play", cmd: "play", type: "secondary", description: "Play <*>" },
+		{ match: ["play"], name: "Play", cmd: "play", type: "secondaryFn", description: `Play <*>` },
 	],
 	secondaryCommands: [
 		// play "cmd"
-		{ match: ["zork"], top: "play", cmd: "zork", lvl: "secondary", description: "Play Zork" },
+		{ match: ["zork"], top: "play", cmd: "zork", lvl: "secondaryFn", description: `Play Zork` },
 	],
 	/**
 	 * Process string output to properly split on line width
@@ -100,9 +100,10 @@ export const cfg = {
 
 export let terminal = {
 	charLimit: 80,
-	getOutput(text) {
+	getOutput(text, width = "mb") {
 
 		let newText = "HI";
+		let size = "mb";
 		let splitCmd = text.split(" ");
 
 		// find the first word that's valid
@@ -111,17 +112,24 @@ export let terminal = {
 		let command;
 
 		for(let i = 0; i < splitCmd.length; i++) {
+
 			firstWordIndex = i;
 			firstWord = splitCmd[i].toLowerCase();
+
 			command = cfg.visibleCommands.find((cmd) => cmd.match.includes(firstWord));
+
+			// continue commands
+			if(command === "cd") continue;
 
 			if(command) break;
 		}
 
+		console.log(command);
+
 		if(!command) return false;
 
 		/** These will run secondary commands */
-		if(command.type === "secondary") {
+		if(command.type === "secondary" || command.type === "secondaryFn") {
 
 			let secondWord = splitCmd[firstWordIndex + 1]?.toLowerCase();
 			let secondCommand = cfg.secondaryCommands.find((cmd) => cmd.match.includes(secondWord));
@@ -130,13 +138,13 @@ export let terminal = {
 
 			if(!secondWord || !secondCommand) return command;
 
-			console.log("SECONDARY", secondCommand);
+			console.log("SECONDARY CMD", secondCommand);
 
 			return [command, secondCommand];
 		}
 
 		if(command.type === "output" || command.type === "hiddenOutput") {
-			let txt = this.output[command.cmd];
+			let txt = this.output[size][command.cmd];
 			if(typeof txt === "object") txt = txt[Math.floor(Math.random() * txt.length)];
 			console.log(typeof txt, txt);
 			return cfg.parseToProperSplits(txt, this.charLimit);
@@ -158,13 +166,36 @@ export let terminal = {
 		"Tab",
 	],
 	output: {
-		init: `Hello!${cfg.newLineFull}I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, and I've been a director of technology and${cfg.newLine}digital strategist for ${(new Date().getFullYear()) - 2010}+ years with a focus on user experience,${cfg.newLine}e-commerce, and team development.`,
-		help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
-		hello: [
-			"Hey there!",
-			"Hi!",
-			"Hello!"
-		],
-		unknown: `Unknown command. Type "help" for a list of commands.`,
+		// mobile width, max 40 char lines
+		mb: {
+			init:
+				`Hello!${cfg.newLineFull}` +
+				`I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, a Milwaukee-based${cfg.newLine}` +
+				`Director of Technology with a focus on${cfg.newLine}` +
+				`digital product strategy and e-commerce${cfg.newLine}` +
+				`currently ${cfg.colors.yellowUnderline}available for consulting work${cfg.colors.reset}.`,
+			help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
+			hello: [
+				"Hey there!",
+				"Hi!",
+				"Hello!"
+			],
+			unknown: `Unknown command. Use "help" for a list of commands.`,
+		},
+		// desktop width, max 80 char lines
+		dk: {
+			init:
+				`Hello!${cfg.newLineFull}` +
+				`I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, a Milwaukee-based Director of Technology with a focus on${cfg.newLine}` +
+				`digital product strategy and e-commerce currently ${cfg.colors.yellowUnderline}available for consulting work${cfg.colors.reset}.`,
+			// init: `Hello!${cfg.newLineFull}I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, and I've been a director of technology and${cfg.newLine}digital strategist for ${(new Date().getFullYear()) - 2010}+ years with a focus on user experience,${cfg.newLine}e-commerce, and team development.`,
+			help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
+			hello: [
+				"Hey there!",
+				"Hi!",
+				"Hello!"
+			],
+			unknown: `Unknown command. Type "help" for a list of commands.`,
+		}
 	}
 };

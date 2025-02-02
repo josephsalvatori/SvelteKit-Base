@@ -38,6 +38,7 @@ $effect(() => {
 });
 
 let siteState = new LocalStore("siteState", {
+	currentPage: null,
 	showNavigation: false
 });
 
@@ -49,7 +50,10 @@ let achievementState = $state({
 
 });
 
-let terminalCtx = $state({});
+let terminalCtx = $state({
+	prepend: "",
+	loaded: false
+});
 
 setContext("siteState", siteState);
 setContext("gameState", gameState);
