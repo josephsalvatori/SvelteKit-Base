@@ -827,8 +827,8 @@ house_west_barrow.closedFail = "You can't go that way.";
 // Narrow passages
 studio_kitchen.weightLimit = 35;
 studio_kitchen.weightFail = "You can't get up there with what you're carrying.";
-altar_cave.weightLimit = 55;
-altar_cave.weightFail = "You can't get down there with what you're carrying.";
+.weightLimit = 55;
+.weightFail = "You can't get down there with what you're carrying.";
 timber_drafty.weightLimit = 0;
 timber_drafty.weightFail = "You cannot fit through this passage with that load.";
 

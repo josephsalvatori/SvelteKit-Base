@@ -57,6 +57,14 @@ export const cfg = {
 		whiteBoldHighIntensity: "\x1b[1;97m",
 		reset: "\x1b[0m",
 	},
+	formats: {
+		bold: "\x1b[1m",
+		italic: "\x1b[3m",
+		boldItalic: "\x1b[1m\x1b[3m",
+		underline: "\x1b[4m",
+		strikethrough: "\x1b[9m",
+		reset: "\x1b[0m",
+	},
 	/**
 	 * @param type enum: ["output", "cmdFn", "hiddenOutput", "hiddenFn"]
 	 */
@@ -77,7 +85,7 @@ export const cfg = {
 	],
 	secondaryCommands: [
 		// play "cmd"
-		{ match: ["zork"], top: "play", cmd: "zork", lvl: "secondaryFn", description: `Play Zork` },
+		{ match: ["zork"], name: "Zork", top: "play", cmd: "zork", lvl: "secondaryFn", description: `Play Zork` },
 	],
 	/**
 	 * Process string output to properly split on line width

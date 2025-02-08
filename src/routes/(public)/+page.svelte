@@ -10,5 +10,4 @@ let terminalCtx = getContext("terminalCtx");
 
 terminalCtx.currentPage = "home";
 terminalCtx.currentPageCopy = homeTerminalCopy;
-
 </script>

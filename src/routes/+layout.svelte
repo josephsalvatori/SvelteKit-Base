@@ -38,12 +38,16 @@ $effect(() => {
 });
 
 let siteState = new LocalStore("siteState", {
-	currentPage: null,
-	showNavigation: false
+	showNavigation: false,
+	saves: {},
+	marks: [],
 });
 
 let gameState = $state({
-
+	config: {
+		mode: null,
+		game: null
+	}
 });
 
 let achievementState = $state({
@@ -70,7 +74,7 @@ setContext("terminalCtx", terminalCtx);
 			<Terminal />
 		</div>
 		{#if dev}
-			<SuperDebug data={siteState} />
+			<SuperDebug data={siteState.current} />
 		{/if}
 	</div>
 </div>

@@ -27,9 +27,6 @@ let cmdCfg = {
 	cursorLeft: "\u001B[1D",
 };
 
-/** Stash our terminal */
-// game.zork = new Zork();
-
 let command = $state("");
 let previousCmds = $state([]);
 let lock = $state(true);
@@ -39,8 +36,6 @@ let lineSize = $derived.by(() => {
 });
 
 const MAX_INPUT_LENGTH = 38;
-
-$inspect(lineSize);
 
 /** Terminal Loader */
 async function onLoad() {
@@ -57,19 +52,16 @@ async function onLoad() {
 	terminalCtx.size = lineSize;
 	terminalCtx.cmdCfg = cmdCfg;
 	terminalCtx.fn = {
-		reset: resetCmd
+		reset: resetCmd,
+		updatePrepend: () => {
+			terminalCtx.prepend = (gameState.config.mode !== null) ? "" : `${cfg.colors.black}[S:${page.url.pathname.replace("/", "\\")}]${cfg.colors.reset}`;
+		}
 	};
 	terminalCtx.loaded = true;
 
 	// set up the initial screen
 	cmd.write(cfg.newLine);
 	cmd.write(terminal.output[lineSize].init);
-
-	// initialize the terminal
-	// if(!game.zork.terminal) game.zork.terminal = cmd;
-	// if(!game.zork.terminalConfig) game.zork.terminalConfig = cmdCfg;
-
-	// game.zork.init();
 }
 
 // handle character input
@@ -81,8 +73,6 @@ function onData(o) {
 	command += o;
 
 	cmd.write(o);
-
-	console.log("onData()", o);
 
 	return;
 }
@@ -106,10 +96,28 @@ function onKey({ key, domEvent }) {
 
 	if(domEvent.key === "Enter") {
 
-		if(siteState.mode === "game") {
+		if(gameState.config.mode === "game") {
 
-			gameState[siteState.game].submitCommand(command, () => {
-				command = "";
+			let game = gameState.config.game;
+
+			gameState[game].submitCommand(command, (result) => {
+
+				let slot = result?.slot || 0;
+
+				if(result.valid === true) {
+
+					let saveObj = siteState.current;
+
+					if(result.cmds) {
+						saveObj.saves[game][slot].cmds = result.cmds;
+					}
+
+					if(result.rnds) {
+						saveObj.saves[game][slot].rnds = result.rnds;
+					}
+				}
+
+				resetCmd();
 			});
 
 			return;
@@ -136,7 +144,11 @@ const backspace = () => {
 	command = command.slice(0, -1);
 };
 
-const resetCmd = (full = true) => {
+const resetCmd = (full = true, reset = false) => {
+
+	if(reset) {
+		cmd.reset();
+	}
 
 	cmd.write((full) ? cfg.newLineFull : cfg.newLine);
 	cmd.write(terminalCtx.prepend + cmdCfg.lineStart);
@@ -197,33 +209,48 @@ function prompt() {
 
 				let game = cmdOutput[1].cmd;
 
+				gameState.config.mode = "game";
+				gameState.config.game = game;
+
+				terminalCtx.fn.updatePrepend();
+
 				if(!gameState[game]) {
+
+					let saveKey = game;
 
 					switch(game) {
 						case "zork":
 							gameState[game] = new Zork(cmd);
+							if(!siteState.current.saves[saveKey]) siteState.current.saves[saveKey] = [{ cmds: [], rnds: [] }];
 							break;
 						default:
+							if(!siteState.current.saves[saveKey]) {
+								siteState.current.saves[saveKey] = [{ cmds: [], rnds: [] }]
+							}
 							return false;
 					}
 
-					cmd.write(cfg.newLineFull);
-					cmd.write(`Loading ${cmdOutput[1]?.name || game}...`);
+					cmd.reset();
 
-					console.log(gameState[game]);
+					cmd.write(cfg.newLine);
+					cmd.write(`Loading ${cmdOutput[1]?.name || game}...`);
 
 					// run the preload function from the game
 					gameState[game].cmd = cmd;
 					gameState[game].preload(() => {
-						lock = false;
+
+						// this is ultimately a fake load time
+						setTimeout(() => {
+
+							lock = false;
+
+							gameState[game].init(siteState.current.saves[saveKey][0]);
+
+							resetCmd();
+
+						}, 500);
 					});
-
 				}
-
-				siteState.mode = "game";
-				siteState.game = game;
-
-				gameState[game].init();
 
 				// TODO: run a callback from the game initilizer to clear() then write the game script
 				break;
@@ -247,26 +274,15 @@ function prompt() {
 
 	// now reset
 	resetCmd();
-
-	// game.zork.terminal.write("\r\n\r\n");
-
-	// game.zork.submitCommand(command, () => {
-
-	// 	lock = false;
-
-	// 	command = "";
-	// });
 }
-
-let displayPage = $state(null);
 
 $effect(() => {
 
 	/** Watching for changes on the current page */
-	if(terminalCtx.loaded && terminalCtx.currentPage !== siteState.currentPage) {
+	if(terminalCtx.loaded && terminalCtx.currentPage !== page.url.pathname) {
 
-		siteState.currentPage = terminalCtx.currentPage;
-		terminalCtx.prepend = terminalCtx.currentPage === "home" ? "" : `${cfg.colors.black}[S:${page.url.pathname.replace("/", "\\")}]${cfg.colors.reset}`;
+		terminalCtx.currentPage = page.url.pathname;
+		terminalCtx.fn.updatePrepend();
 
 		if(terminalCtx.currentPageCopy) {
 			terminalCtx.cmd.write(cfg.newLineFull);

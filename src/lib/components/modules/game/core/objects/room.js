@@ -1,7 +1,10 @@
 class Room {
 
-    constructor(name, desc, loc)
+    constructor(game, name, desc, loc)
     {
+
+		this.game = game;
+
         this.name = name;
         this.description = desc;
         this.roomID = loc;

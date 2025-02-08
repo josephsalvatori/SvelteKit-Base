@@ -1078,7 +1078,7 @@ class Actor extends GameObject {
         }
     }
 
-    thiefTurn()
+    thiefTurn() // <--- Here
     {
         if (!this.alive) return;
 

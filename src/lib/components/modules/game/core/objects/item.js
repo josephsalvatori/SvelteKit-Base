@@ -185,7 +185,6 @@ class Item extends GameObject {
         }
     }
 
-
     burn()
     {
         switch (state.indirectObject.name)
@@ -1052,7 +1051,6 @@ class Item extends GameObject {
         output("Taken.");
     }
 
-
     throwObject()
     {
         switch(state.indirectObject.name)
@@ -1312,9 +1310,6 @@ class Item extends GameObject {
 
             } break;
         }
-
-
-
     }
 
     untie()
@@ -1432,7 +1427,6 @@ class Item extends GameObject {
         }
     }
 
-
     getItemDescription()
     {
         if (this.movedFromStart || this.initialPresenceString === "")
@@ -1491,7 +1485,4 @@ class Item extends GameObject {
             }
         }
     }
-
-    isOpen() { return this.itemOpen; }
-    tick() { --this.lifespan; }
 }
