@@ -141,174 +141,186 @@ const CONSTANTS = {
 	ZORK_MANUAL_WEIGHT: 2,
 };
 
+// regex to match strings between two backticks, over 80 characters long
+
+
+
+// `([^`]{79,})
+
 const GAME_STRINGS = {
 
-	COMBAT_MISS_1: "Your WEAPON misses the ENEMY by an inch.",
-    COMBAT_MISS_2: "A good slash, but it misses the ENEMY by a mile.",
-    COMBAT_MISS_3: "You charge, but the ENEMY jumps nimbly aside.",
-    COMBAT_PARRY_1: "Clang! Crash! The ENEMY parries.",
-    COMBAT_PARRY_2: "A quick stroke, but the ENEMY is on guard.",
-    COMBAT_PARRY_3: "A good stroke, but it's too slow, the ENEMY dodges.",
-    COMBAT_KNOCKOUT_1: "Your WEAPON crashes down, knocking the ENEMY into dreamland.",
-    COMBAT_KNOCKOUT_2: "The ENEMY is battered into unconsciousness.",
-    COMBAT_KNOCKOUT_3: "A furious exchange, and the ENEMY is knocked out!",
-    COMBAT_KNOCKOUT_4: "The haft of your WEAPON knocks out the ENEMY.",
-    COMBAT_FATAL_1: "It's curtains for the ENEMY as your WEAPON removes his head.",
-    COMBAT_FATAL_2: "The fatal blow strikes the ENEMY square in the heart: He dies.",
-    COMBAT_FATAL_3: "The ENEMY takes a fatal blow and slumps to the floor dead.",
-    COMBAT_LIGHT_1: "The ENEMY is struck on the arm, blood begins to trickle down.",
-    COMBAT_LIGHT_2: "The WEAPON pinks the ENEMY on the wrist, but it's not serious.",
-    COMBAT_LIGHT_3: "Your stroke lands, but it was only the flat of the blade.",
-    COMBAT_LIGHT_4: "The blow lands, making a shallow gash in the ENEMY's arm!",
-    COMBAT_SEVERE_1: "The ENEMY receives a deep gash in his side.",
-    COMBAT_SEVERE_2: "A savage blow on the thigh! The ENEMY is stunned but can still fight!",
-    COMBAT_SEVERE_3: "Slash! Your blow lands! That one hit an artery, it could be serious!",
-    COMBAT_SEVERE_4: "Slash! Your stroke connects! This could be serious!",
-    COMBAT_STAGGER_1: "The ENEMY is staggered, and drops to his knees.",
-    COMBAT_STAGGER_2: "The ENEMY is momentarily disoriented and can't fight back.",
-    COMBAT_STAGGER_3: "The force of your blow knocks the ENEMY back, stunned.",
-    COMBAT_STAGGER_4: "The ENEMY is confused, and can't fight back.",
-    COMBAT_DISARM_1: "The quickness of your thrust knocks the ENEMY's weapon to the floor, leaving him unarmed.",
-    COMBAT_DISARM_2: "The ENEMY is disarmed by a subtle feint past his guard.",
-    COMBAT_FINISH_DISARMED: "The unarmed ENEMY cannot defend himself: He dies.",
-    COMBAT_FINISH_UNCONSCIOUS: "The unconscious ENEMY cannot defend himself: He dies.",
+	COMBAT_MISS_1: `Your WEAPON misses the ENEMY by an inch.`,
+    COMBAT_MISS_2: `A good slash, but it misses the ENEMY by a mile.`,
+    COMBAT_MISS_3: `You charge, but the ENEMY jumps nimbly aside.`,
+    COMBAT_PARRY_1: `Clang! Crash! The ENEMY parries.`,
+    COMBAT_PARRY_2: `A quick stroke, but the ENEMY is on guard.`,
+    COMBAT_PARRY_3: `A good stroke, but it's too slow, the ENEMY dodges.`,
+    COMBAT_KNOCKOUT_1: `Your WEAPON crashes down, knocking the ENEMY into dreamland.`,
+    COMBAT_KNOCKOUT_2: `The ENEMY is battered into unconsciousness.`,
+    COMBAT_KNOCKOUT_3: `A furious exchange, and the ENEMY is knocked out!`,
+    COMBAT_KNOCKOUT_4: `The haft of your WEAPON knocks out the ENEMY.`,
+    COMBAT_FATAL_1: `It's curtains for the ENEMY as your WEAPON removes his head.`,
+    COMBAT_FATAL_2: `The fatal blow strikes the ENEMY square in the heart: He dies.`,
+    COMBAT_FATAL_3: `The ENEMY takes a fatal blow and slumps to the floor dead.`,
+    COMBAT_LIGHT_1: `The ENEMY is struck on the arm, blood begins to trickle down.`,
+    COMBAT_LIGHT_2: `The WEAPON pinks the ENEMY on the wrist, but it's not serious.`,
+    COMBAT_LIGHT_3: `Your stroke lands, but it was only the flat of the blade.`,
+    COMBAT_LIGHT_4: `The blow lands, making a shallow gash in the ENEMY's arm!`,
+    COMBAT_SEVERE_1: `The ENEMY receives a deep gash in his side.`,
+    COMBAT_SEVERE_2: `A savage blow on the thigh! The ENEMY is stunned but can still fight!`,
+    COMBAT_SEVERE_3: `Slash! Your blow lands! That one hit an artery, it could be serious!`,
+    COMBAT_SEVERE_4: `Slash! Your stroke connects! This could be serious!`,
+    COMBAT_STAGGER_1: `The ENEMY is staggered, and drops to his knees.`,
+    COMBAT_STAGGER_2: `The ENEMY is momentarily disoriented and can't fight back.`,
+    COMBAT_STAGGER_3: `The force of your blow knocks the ENEMY back, stunned.`,
+    COMBAT_STAGGER_4: `The ENEMY is confused, and can't fight back.`,
+    COMBAT_DISARM_1: `The quickness of your thrust knocks the ENEMY's weapon to the floor, leaving${cfg.newLine}`
+		+ `him unarmed.`,
+    COMBAT_DISARM_2: `The ENEMY is disarmed by a subtle feint past his guard.`,
+    COMBAT_FINISH_DISARMED: `The unarmed ENEMY cannot defend himself: He dies.`,
+    COMBAT_FINISH_UNCONSCIOUS: `The unconscious ENEMY cannot defend himself: He dies.`,
 
-    COMBAT_ENEMY_DIES: `Almost as soon as the ENEMY breathes his last breath, a cloud of sinister black fog `
-        + `envelops him, and when the fog lifts, the carcass has disappeared.`,
+    COMBAT_ENEMY_DIES: `Almost as soon as the ENEMY breathes his last breath, a cloud of sinister black${cfg.newLine}`
+        + `fog envelops him, and when the fog lifts, the carcass has disappeared.`,
     COMBAT_HP_ZERO: `It appears that last blow was too much for you. I'm afraid you are dead.`,
     COMBAT_STAGGERED: `You are still recovering from that last blow, so your attack is ineffective.`,
 
-    GAME_BEGIN: `${cfg.colors.yellowBold}ZORK I: The Great Underground Empire${cfg.colors.reset}`
-        + `${cfg.newLine}Copyright (c) 1981, 1982, 1983 Infocom, Inc. All rights reserved.`
-        + `${cfg.newLine}ZORK is a registered trademark of Infocom, Inc.`
-        + `${cfg.newLine}Revision 89 / Serial number 840726`,
+    GAME_BEGIN: `${cfg.colors.yellowBold}ZORK I: The Great Underground Empire${cfg.colors.reset}${cfg.newLine}`
+        + `Copyright (c) 1981, 1982, 1983 Infocom, Inc. All rights reserved.${cfg.newLine}`
+        + `ZORK is a registered trademark of Infocom, Inc.${cfg.newLine}`
+        + `Revision 88js / Serial number 840726`,
 
-    ALL_TREASURES_IN_CASE: `An almost inaudible voice whispers in your ear, \`Look to your treasures for the `
-        + `final secret.`,
+    ALL_TREASURES_IN_CASE: `An almost inaudible voice whispers in your ear, "Look to your treasures for${cfg.newLine}`
+        + `the final secret."`,
 
-    ABOUT_INFO: `Zork I: The Great Underground Empire is a classic computer game developed by `
-        + `Marc Blank, Dave Lebling, Bruce Daniels, and Tim Anderson at MIT in the late 1970s. `
-        + `It became the basis of the computer game company Infocom, which published many Zork-related `
-        + `titles in the 1980s and 1990s, and was acquired by Activision, which still owns the copyright.`
-        + `\n\nThis program was written in 2020 by Nate Tryon and exists purely for educational, non-monetary `
-        + `purposes.\n\nThe code may be viewed here: https://github.com/PotterOtherP/JSZork`,
+    ABOUT_INFO: `Zork I: The Great Underground Empire is a classic computer game developed by${cfg.newLine}`
+        + `Marc Blank, Dave Lebling, Bruce Daniels, and Tim Anderson at MIT in the late${cfg.newLine}`
+        + `1970s. It became the basis of the computer game company Infocom, which published${cfg.newLine}`
+        + `many Zork-related titles in the 1980s and 1990s, and was acquired by Activision,${cfg.newLine}`
+        + `which still owns the copyright.${cfg.newLineFull}`
+		+ `This program was enhanced by Joseph Salvatori, building off a library written${cfg.newLine}`
+        + `in 2020 by Nate Tryon and exists purely for educational, non-monetary purposes.${cfg.newLineFull}`
+		+ `The base library may be viewed here: ${cfg.formats.underline}https://github.com/PotterOtherP/JSZork${cfg.formats.reset}`,
 
-    HELP_INFO: `Find the 19 lost treasures of Zork and return them to the trophy case.`
-        + `\n\nTry moving north, south, east, west, up, or down. Try to take objects and do things with them.`
-        + `\n\nThe game is difficult to complete without some references.`
-        + `\nFind walkthroughs here: https://gamefaqs.gamespot.com/pc/564446-zork-i/faqs`
-        + `\nAnd maps here: http://struckus.tripod.com/Zork1maps.htm`,
+    HELP_INFO: `Find the 19 lost treasures of Zork and return them to the trophy case.${cfg.newLineFull}`
+        + `Try moving north, south, east, west, up, or down. Try to take objects and do things with them.${cfg.newLineFull}`
+        + `The game is difficult to complete without some references.${cfg.newLine}`
+        + `Find walkthroughs here: https://gamefaqs.gamespot.com/pc/564446-zork-i/faqs${cfg.newLine}`
+        + `And maps here: http://struckus.tripod.com/Zork1maps.htm`,
+
+    BLACK_BOOK_TEXT: `Commandment #12592${cfg.newLineFull}`
+        + `Oh ye who go about saying unto each: "Hello sailor":${cfg.newLine}`
+        + `Dost thou know the magnitude of thy sin before the gods?${cfg.newLine}`
+        + `Yea, verily, thou shalt be ground between two stones.${cfg.newLine}`
+        + `Shall the angry gods cast thy body into the whirlpool?${cfg.newLine}`
+        + `Surely, thy eye shall be put out with a sharp stick!${cfg.newLine}`
+        + `Even unto the ends of the earth shalt thou wander and${cfg.newLine}`
+        + `Unto the land of the dead shalt thou be sent at last.${cfg.newLine}`
+        + `Surely thou shalt repent of thy cunning.`,
+    BOAT_LABEL_TEXT: `${cfg.tab}!!!!  FROBOZZ MAGIC BOAT COMPANY  !!!!${cfg.newLineFull}`
+        + `Hello, Sailor!${cfg.newLineFull}`
+        + `Instructions for use:${cfg.newLineFull}`
+        + `  To get into a body of water, say "Launch".${cfg.newLine}`
+        + `  To get to shore, say "Land" or the direction in which you want to maneuver the boat.${cfg.newLineFull}`
+        + `Warranty:${cfg.newLineFull}`
+        + `  This boat is guaranteed against all defects for a period of 76 milliseconds from date of${cfg.newLine}`
+        + `purchase or until first used, whichever comes first.${cfg.newLineFull}`
+        + `Warning:${cfg.newLine}`
+        + `  This boat is made of thin plastic.${cfg.newLine}`
+        + `  Good Luck!`,
+    CANT_GO: `You can't go that way.`,
+    DAM_GUIDEBOOK_TEXT: `${cfg.tab}Flood Control Dam #3${cfg.newLineFull}`
+        + `FCD#3 was constructed in the year 783 of the Great Underground Empire to harness the mighty Frigid River. This work was supported by${cfg.newLine}`
+        + `a grant of 37 million zorkmids from your omnipotent local tyrant Lord Dimwit Flathead the Excessive. This impressive structure is${cfg.newLine}`
+        + `composed of 370,000 cubic feet of concrete, is 256 feet tall at the center, and 193 feet wide at the top. The lake created behind the${cfg.newLine}`
+        + `dam has a volume of 1.7 billion cubic feet, an area of 12 million square feet, and a shore line of 36 thousand feet.${cfg.newLineFull}`
+        + `We will now point out soem of the more interesting features of FCD#3 as we conduct you on a guided tour of the facilities:${cfg.newLine}`
+        + `${cfg.tab}1) You start your tour here in the Dam Lobby. You will notice on your right that...${cfg.newLine}`,
+    DARKNESS: `It is pitch black. You are likely to be eaten by a grue.`,
+    DARKNESS_LISTEN: `There are sinister gurgling noises in the darkness all around you!`,
+    DEAD_ACTION_FAIL: `You can't even do that.`,
+    DEAD_CANNOT_ENTER: `You cannot enter in your condition.`,
+    DEAD_DIAGNOSE: `You are dead.`,
+    DEAD_DOME_PASSAGE: `As you enter the dome you feel a strong pull as if from a wind drawing${cfg.newLine}`
+        + `you over the railing and down.`,
+    DEAD_INVENTORY: `You have no possessions.`,
+    DEAD_LOOK: `The room looks strage and unearthly and objects appear indistinct.${cfg.newLine}`
+        + `Although there is no light, the room seems dimly illuminated.`,
+    DEAD_PRAY_ALTAR: `From the distance the sound of a lone trumpet is heard. The room becomes${cfg.newLine}`
+        + `very bright and you feel disembodied. In a moment, the brightness fades and you find yourself rising as if from${cfg.newLine}`
+        + `a long sleep, deep in the woods. In the distance you can faintly hear a songbird and the sounds of the forest.`,
+    DEAD_PRAY_FAIL: `Your prayers are not heard.`,
+    DEAD_SCORE: `You're dead! How can you think of your score?`,
+    DEAD_TAKE_OBJECT: `Your hand passes through its object.`,
+    DEAD_TOUCH: `Even such an action is beyond your capabilities.`,
+    DEAD_WAIT: `Might as well. You've got an eternity.`,
+    ENGRAVINGS_TEXT: `The engravings were incised in the living rock of the cave wall by an unknown hand. They depict,${cfg.newLine}`
+        + `in symbolic form, the beliefs of the ancient Zorkers. Skillfully interwoven with the bas reliefs are excerpts illustrating the major${cfg.newLine}`
+        + `religious tenets of that time. Unfortunately, a later age seems to have considered them blasphemous and just as skillfully excised them.`,
+    ENTER_DARKNESS: `You have moved into a dark place.`,
+    GAS_EXPLOSION: `Oh dear. It appears that the smell coming from this room was coal gas. I would have${cfg.newLine}`
+        + `thought twice about carrying flaming objects in here.${cfg.newLineFull}`
+		+ `${cfg.tab}** BOOOOOOOOOOOOM **`,
+    GRUE_DEATH_1: `Oh no! You have walked into the slavering fangs of a lurking grue!`,
+    GRUE_DEATH_2: `Oh no! A lurking grue slithered into the room and devoured you!`,
+    HOLLOW_VOICE: `A hollow voice says "Fool."`,
+    LAUNCH_FAIL: `You need to be near a body of water to launch the boat. Maybe you are hallucinating a body${cfg.newLine}`
+        + `of water here. It may be a good idea to see a neurologist.`,
+	LAUNCH_FAIL_2: `Refer to the boat label for instructions.${cfg.newLineFull}`,
+	LAUNCH_FAIL_3: `You can't go there in a magic boat.${cfg.newLineFull}`,
+    LEAFLET_TEXT: `WELCOME TO ZORK!${cfg.newLineFull}`
+		+ `ZORK is a game of adventure, danger, and low cunning. In it you will explore${cfg.newLine}`
+        + `some of the most amazing territory ever seen by mortals. No computer should be without one!`,
+    MOVE_RUG: `With a great effort, the rug is moved to one side of the room, revealing the dusty cover${cfg.newLine}`
+        + `of a closed trap door.`,
+    NATE_MANUAL_TEXT: `Congratulations!${cfg.newLineFull}`
+		+ `You are the privileged owner of a shoddy facsimile of ZORK I:${cfg.newLine}`
+        + `The Great Underground Empire, a legendary self-contained and self-maintaining universe created in the late 1970's by some${cfg.newLine}`
+        + `computer geniuses at MIT. If used and maintained in accordance with normal operating practices for small universes, this pale${cfg.newLine}`
+        + `imitation of ZORK I will provide many months of troubled and bug-ridden operation, including bizarre logical errors and${cfg.newLine}`
+        + `countless thrown exceptions.`,
+    OVERBURDENED: `You can't carry any more.`,
+    PASSAGE_OVERBURDENED: `You are carrying too much.`,
+    PLAYER_DIES: `${cfg.tab}****  You have died  ****${cfg.newLineFull}`
+        + `Now, let's take a look here... Well, you probably deserve another chance. I can't quite fix you up${cfg.newLine}`
+        + `completely, but you can't have everything.`,
+    PLAYER_DIES_FOR_REAL: `${cfg.tab}****  You have died  ****${cfg.newLineFull}`
+        + `As you take your last breath, you feel relieved of your burdens.${cfg.newLine}`
+        + `The feeling passes as you find yourself before the gates of Hell, where the spirits jeer at you and deny you${cfg.newLine}`
+        + `entry. Your senses are disturbed. The objects in the dungeon appear indistinct, bleached of color, even unreal.`,
+    PLAYER_DIES_SUICIDE: `You clearly are a suicidal maniac. We don't allow psychotics in the cave,${cfg.newLine}`
+        + `since they may harm other adventurers. Your remains will be installed in the Land of the Living Dead, where your${cfg.newLine}`
+        + `fellow adventurers may gloat over them.`,
+    PLAYER_DIES_WHILE_DEAD: `It takes a talented person to be killed while already dead. YOU are${cfg.newLine}`
+        + `such a talent. Unfortunately, it takes a talented person to deal with it. I am not such a talent. Sorry.`,
+    PROFANITY_ONE: `Such language in a high-class establishment like this!`,
+    PROFANITY_TWO: `Do you have to use so many cuss words?`,
+    PROFANITY_THREE: `There's no need for that kind of language.`,
+    RUG_ALREADY_MOVED: `Having moved the carpet previously, you find it impossible to move it again.`,
+    SAILOR: `Nothing happens here.`,
+    TEMPLE_PRAYER: `The prayer is inscribed in an ancient script, rarely used today. It seems to be a${cfg.newLine}`
+        + `philippic against small insects, absent-mindedness, and the picking up and dropping of small objects. The final verse${cfg.newLine}`
+        + `consigns trespassers to the land of the dead. All evidence indicates that the beliefs of the ancient Zorkers were obscure.`,
+    TOO_DARK: `It's too dark to see!`,
+    TRAP_DOOR_OPENS: `The door reluctantly opens to reveal a rickety staircase descending into darkness.`,
+    WATERFALL_DEATH_BOAT: `Unfortunately, the magic boat doesn't provide protection from the rocks and${cfg.newLine}`
+        + `boulders one meets at the bottom of waterfalls. Including this one.`,
+    WATERFALL_DEATH_SWIM: `In other words, fighting the fierce currents of the Frigid River. You manage${cfg.newLine}`
+        + `to hold your own for a bit, but then you are carried over a waterfall and into some nasty rocks. Ouch!`,
+    WINDOW_CLOSES: `The window closes (more easily than it opened).`,
+    WINDOW_OPENS: `With great effort, you open the window far enough to allow entry.`,
+    ZORK_MANUAL_TEXT: `Congratulations!${cfg.newLineFull}`
+		+ `You are the privileged owner of ZORK I: The Great Underground Empire, a${cfg.newLine}`
+        + `self-contained and self-maintaining universe. If used and maintained in accordance with normal operating practices for small${cfg.newLine}`
+        + `universes, ZORK will provide many months of trouble-free operation.`,
 
 
-    BLACK_BOOK_TEXT: "Commandment #12592\n\n"
-        + "Oh ye who go about saying unto each: \"Hello sailor\":\n"
-        + "Dost thou know the magnitude of thy sin before the gods?\n"
-        + "Yea, verily, thou shalt be ground between two stones.\n"
-        + "Shall the angry gods cast thy body into the whirlpool?\n"
-        + "Surely, thy eye shall be put out with a sharp stick!\n"
-        + "Even unto the ends of the earth shalt thou wander and\n"
-        + "Unto the land of the dead shalt thou be sent at last.\n"
-        + "Surely thou shalt repent of thy cunning.",
-    BOAT_LABEL_TEXT: "         !!!!  FROBOZZ MAGIC BOAT COMPANY  !!!!\n\n"
-        + "Hello, Sailor!\n\n"
-        + "Instructions for use:\n\n"
-        + "   To get into a body of water, say \"Launch\".\n"
-        + "   To get to shore, say \"Land\" or the direction in which you want to maneuver the boat.\n\n"
-        + "Warranty:\n\n"
-        + "  This boat is guaranteed against all defects for a period of 76 milliseconds from date of "
-        + "purchase or until first used, whichever comes first.\n\n"
-        + "Warning:\n"
-        + "   This boat is made of thin plastic.\n"
-        + "   Good Luck!",
-    CANT_GO: "You can't go that way.",
-    DAM_GUIDEBOOK_TEXT: "       Flood Control Dam #3\n\n"
-        + "FCD#3 was constructed in the year 783 of the Great Underground Empire to harness the mighty Frigid River. This work was supported by "
-        + "a grant of 37 million zorkmids from your omnipotent local tyrant Lord Dimwit Flathead the Excessive. This impressive structure is "
-        + "composed of 370,000 cubic feet of concrete, is 256 feet tall at the center, and 193 feet wide at the top. The lake created behind the "
-        + "dam has a volume of 1.7 billion cubic feet, an area of 12 million square feet, and a shore line of 36 thousand feet.\n\n"
-        + "We will now point out soem of the more interesting features of FCD#3 as we conduct you on a guided tour of the facilities:\n"
-        + "        1) You start your tour here in the Dam Lobby. You will notice on your right that...\n",
-    DARKNESS: "It is pitch black. You are likely to be eaten by a grue.",
-    DARKNESS_LISTEN: "There are sinister gurgling noises in the darkness all around you!",
-    DEAD_ACTION_FAIL: "You can't even do that.",
-    DEAD_CANNOT_ENTER: "You cannot enter in your condition.",
-    DEAD_DIAGNOSE: "You are dead.",
-    DEAD_DOME_PASSAGE: "As you enter the dome you feel a strong pull as if from a wind drawing "
-        + "you over the railing and down.",
-    DEAD_INVENTORY: "You have no possessions.",
-    DEAD_LOOK: "The room looks strage and unearthly and objects appear indistinct."
-        + "\nAlthough there is no light, the room seems dimly illuminated.",
-    DEAD_PRAY_ALTAR: "From the distance the sound of a lone trumpet is heard. The room becomes "
-        + "very bright and you feel disembodied. In a moment, the brightness fades and you find yourself rising as if from "
-        + "a long sleep, deep in the woods. In the distance you can faintly hear a songbird and the sounds of the forest.",
-    DEAD_PRAY_FAIL: "Your prayers are not heard.",
-    DEAD_SCORE: "You're dead! How can you think of your score?",
-    DEAD_TAKE_OBJECT: "Your hand passes through its object.",
-    DEAD_TOUCH: "Even such an action is beyond your capabilities.",
-    DEAD_WAIT: "Might as well. You've got an eternity.",
-    ENGRAVINGS_TEXT: "The engravings were incised in the living rock of the cave wall by an unknown hand. They depict, "
-        + "in symbolic form, the beliefs of the ancient Zorkers. Skillfully interwoven with the bas reliefs are excerpts illustrating the major "
-        + "religious tenets of that time. Unfortunately, a later age seems to have considered them blasphemous and just as skillfully excised them.",
-    ENTER_DARKNESS: "You have moved into a dark place.",
-    GAS_EXPLOSION: "Oh dear. It appears that the smell coming from this room was coal gas. I would have "
-        + "thought twice about carrying flaming objects in here.\n\n      ** BOOOOOOOOOOOOM **",
-    GRUE_DEATH_1: "Oh no! You have walked into the slavering fangs of a lurking grue!",
-    GRUE_DEATH_2: "Oh no! A lurking grue slithered into the room and devoured you!",
-    HOLLOW_VOICE: "A hollow voice says \"Fool.\"",
-    LAUNCH_FAIL: "You need to be near a body of water to launch the boat. Maybe you are hallucinating a body "
-        + "of water here. It may be a good idea to see a neurologist.",
-	LAUNCH_FAIL_2: "Refer to the boat label for instructions.\n\n",
-	LAUNCH_FAIL_3: "You can't go there in a magic boat.\n\n",
-    LEAFLET_TEXT: "WELCOME TO ZORK!\n\nZORK is a game of adventure, danger, and low cunning. In it you will explore "
-        + "some of the most amazing territory ever seen by mortals. No computer should be without one!",
-    MOVE_RUG: "With a great effort, the rug is moved to one side of the room, revealing the dusty cover "
-        + "of a closed trap door.",
-    NATE_MANUAL_TEXT: "\nCongratulations!\n\nYou are the privileged owner of a shoddy facsimile of ZORK I: "
-        + "The Great Underground Empire, a legendary self-contained and self-maintaining universe created in the late 1970's by some "
-        + "computer geniuses at MIT. If used and maintained in accordance with normal operating practices for small universes, this pale "
-        + "imitation of ZORK I will provide many months of troubled and bug-ridden operation, including bizarre logical errors and "
-        + "countless thrown exceptions.",
-    OVERBURDENED: "You can't carry any more.",
-    PASSAGE_OVERBURDENED: "You are carrying too much.",
-    PLAYER_DIES: "\n   ****  You have died  ****\n\n"
-        + "Now, let's take a look here... Well, you probably deserve another chance. I can't quite fix you up "
-        + "completely, but you can't have everything.",
-    PLAYER_DIES_FOR_REAL: "\n   ****  You have died  ****\n\n"
-        + "As you take your last breath, you feel relieved of your burdens. "
-        + "The feeling passes as you find yourself before the gates of Hell, where the spirits jeer at you and deny you "
-        + "entry. Your senses are disturbed. The objects in the dungeon appear indistinct, bleached of color, even unreal.",
-    PLAYER_DIES_SUICIDE: "You clearly are a suicidal maniac. We don't allow psychotics in the cave, "
-        + "since they may harm other adventurers. Your remains will be installed in the Land of the Living Dead, where your "
-        + "fellow adventurers may gloat over them.",
-    PLAYER_DIES_WHILE_DEAD: "It takes a talented person to be killed while already dead. YOU are "
-        + "such a talent. Unfortunately, it takes a talented person to deal with it. I am not such a talent. Sorry.",
-    PROFANITY_ONE: "Such language in a high-class establishment like this!",
-    PROFANITY_TWO: "Do you have to use so many cuss words?",
-    PROFANITY_THREE: "There's no need for that kind of language.",
-    RUG_ALREADY_MOVED: "Having moved the carpet previously, you find it impossible to move it again.",
-    SAILOR: "Nothing happens here.",
-    TEMPLE_PRAYER: "The prayer is inscribed in an ancient script, rarely used today. It seems to be a "
-        + "philippic against small insects, absent-mindedness, and the picking up and dropping of small objects. The final verse "
-        + "consigns trespassers to the land of the dead. All evidence indicates that the beliefs of the ancient Zorkers were obscure.",
-    TOO_DARK: "It's too dark to see!",
-    TRAP_DOOR_OPENS: "The door reluctantly opens to reveal a rickety staircase descending into darkness.",
-    WATERFALL_DEATH_BOAT: "Unfortunately, the magic boat doesn't provide protection from the rocks and "
-        + "boulders one meets at the bottom of waterfalls. Including this one.",
-    WATERFALL_DEATH_SWIM: "In other words, fighting the fierce currents of the Frigid River. You manage "
-        + "to hold your own for a bit, but then you are carried over a waterfall and into some nasty rocks. Ouch!",
-    WINDOW_CLOSES: "The window closes (more easily than it opened).",
-    WINDOW_OPENS: "With great effort, you open the window far enough to allow entry.",
-    ZORK_MANUAL_TEXT: "Congratulations!\n\nYou are the privileged owner of ZORK I: The Great Underground Empire, a "
-        + "self-contained and self-maintaining universe. If used and maintained in accordance with normal operating practices for small "
-        + "universes, ZORK will provide many months of trouble-free operation.",
+    SARCASM: [`What a concept!`, `You can't be serious.`, `A valiant attempt.`, `An interesting idea...`],
 
+    JUMP_SARCASM: [`Very good. Now you can go to the second grade.`, `Wheeeeeeeeee!!!!!`,
+            `Do you expect me to applaud?`, `Are you enjoying yourself?`],
 
-    SARCASM: ["What a concept!", "You can't be serious.", "A valiant attempt.", "An interesting idea..."],
-
-    JUMP_SARCASM: ["Very good. Now you can go to the second grade.", "Wheeeeeeeeee!!!!!",
-            "Do you expect me to applaud?", "Are you enjoying yourself?"],
-
-    HARD_SARCASM: ["Look around.", "Too late for that.", "Have your eyes checked."],
+    HARD_SARCASM: [`Look around.`, `Too late for that.`, `Have your eyes checked.`],
 
     getSarcasticResponse: function()
     {
@@ -400,7 +412,6 @@ const ACTION = {
     JUMP: "JUMP",
     LOOK: "LOOK",
     PRAY: "PRAY",
-    QUIT: "QUIT",
     RESTART: "RESTART",
     SAY: "SAY",
     SCORE: "SCORE",
@@ -726,51 +737,51 @@ const OPENABLE_INSTANCES = [
 ];
 
 const OUTPUT_LISTS = {
-	saveLoaded: "Game loaded from a previous save.",
-	gameSaved: "Your game state has been saved.",
-	gameReset: "Your game state has been reset.",
-	emptyBag: "There is nothing in your bag!",
-	bagContains: "Your bag contains:",
-	acceptableCommands: "Here is a list of acceptable commands:",
+	saveLoaded: `Game loaded from a previous save.`,
+	gameSaved: `Your game state has been saved.`,
+	gameReset: `Your game state has been reset.`,
+	emptyBag: `There is nothing in your bag!`,
+	bagContains: `Your bag contains:`,
+	acceptableCommands: `Here is a list of acceptable commands:`,
 	acceptableCommandList: [
-		"> go [ direction ]",
-		"> north",
-		"> east",
-		"> south",
-		"> west",
-		"> up",
-		"> down",
-		"> look",
-		"> open",
-		"> enter",
-		"> exit",
-		"> climb",
-		"> brief [ short descriptions ]",
-		"> verbose [ long descriptions ]",
-		"> help",
-		"> take",
-		"> bag",
-		"> save [ Save current game ]",
-		"> reset [ Reset game including save ]"
+		`> go [ direction ]`,
+		`> north`,
+		`> east`,
+		`> south`,
+		`> west`,
+		`> up`,
+		`> down`,
+		`> look`,
+		`> open`,
+		`> enter`,
+		`> exit`,
+		`> climb`,
+		`> brief [ short descriptions ]`,
+		`> verbose [ long descriptions ]`,
+		`> help`,
+		`> take`,
+		`> bag`,
+		`> save [ Save current game ]`,
+		`> reset [ Reset game including save ]`
 	],
-	verboseMode: "ZORK is now in its \"verbose\" mode, which always gives long descriptions of locations (even if you've been there before).",
-	briefMode: "ZORK is now in its normal \"brief\" printing mode, which gives long descriptions of places never before visited, and short descriptions otherwise.",
-	invalidDirection: "You can't go that way.",
-	notOpenable: "You can't open that.",
-	notUseable: "Use what?",
-	alreadyInUse: "The item is already in use. Putting item away.",
-	notReadable: "You can't read that.",
-	emptyCommand: "I beg your pardon?",
-	invalidCommand: "I can't tell what you're trying to do.",
-	noPreviousCommand: "Again what?",
+	verboseMode: `ZORK is now in its \`verbose\` mode, which always gives long descriptions of locations (even if you've been there before).`,
+	briefMode: `ZORK is now in its normal \`brief\` printing mode, which gives long descriptions of places never before visited, and short descriptions otherwise.`,
+	invalidDirection: `You can't go that way.`,
+	notOpenable: `You can't open that.`,
+	notUseable: `Use what?`,
+	alreadyInUse: `The item is already in use. Putting item away.`,
+	notReadable: `You can't read that.`,
+	emptyCommand: `I beg your pardon?`,
+	invalidCommand: `I can't tell what you're trying to do.`,
+	noPreviousCommand: `Again what?`,
 	titleScreen: `${cfg.colors.yellowBold}ZORK I: The Great Underground Empire.${cfg.colors.reset}${cfg.newLineFull}${cfg.colors.black}Copyright (c) 1981, 1982, 1982 Infocom, Inc. All rights reserved.${cfg.newLine}ZORK is a registered trademark of Infocom, Inc.${cfg.newLine}Revision 89 / Serial Number 840726${cfg.newLineFull}Original game by Tim Anderson, Marc Blank, Bruce Daniels, and Dave Lebling.${cfg.newLine}Latest version by Joseph Salvatori, extended from a JavaScript port by Nate Tryon (https://github.com/PotterOtherP).${cfg.colors.reset}${cfg.newLineFull}Type "help" for a list of commands.`,
 	aboutGame: `Zork I: The Great Underground Empire is a classic computer game developed by${LINE_BREAK}Marc Blank, Dave Lebling, Bruce Daniels, and Tim Anderson at MIT in the late 1970s.${LINE_BREAK}It became the basis of the computer game company Infocom, which published many Zork-related${LINE_BREAK}titles in the 1980s and 1990s, and was acquired by Activision, which still owns the copyright.`,
-	bugReport: "Bug? Maybe in the original program, but not in a flawless remake like this! (Cough, cough.)",
+	bugReport: `Bug? Maybe in the original program, but not in a flawless remake like this! (Cough, cough.)`,
 };
 
 const MAP_STRINGS = {
-	DESC_WEST_OF_HOUSE: `You are standing in an open field west of a white house, with a boarded front door.`
-    + `\r\nThere is a small mailbox here.`,
+	DESC_WEST_OF_HOUSE: `You are standing in an open field west of a white house, with a boarded front door.${cfg.newLineFull}`
+    + `There is a small mailbox here.`,
 
     DESC_NORTH_OF_HOUSE: `You are facing the north side of a white house. There is no door here, `
         + `and all the windows are boarded up. To the north a narrow path winds through the trees.`,
@@ -841,7 +852,7 @@ const MAP_STRINGS = {
         + `sign. It reads: All ye who stand before this bridge have completed a great and perilous adventure which has tested your `
         + `wit and courage. You have mastered the first part of the ZORK trilogy. Those who pass over this bridge must be prepared `
         + `to undertake an even greater adventure that will severely test your skill and bravery!\n`
-        + `The ZORK trilogy continues with \`ZORK II: The Wizard of Frobozz\` and is completed in \`ZORK III: The Dungeon Master.\``,
+        + `The ZORK trilogy continues with "ZORK II: The Wizard of Frobozz" and is completed in "ZORK III: The Dungeon Master."`,
 
     DESC_CELLAR: `You are in a dark and damp cellar with a narrow passageway leading north, and a `
         + `crawlway to the south. On the west is the bottom of a steep metal ramp which is unclimbable.`,
@@ -878,8 +889,8 @@ const MAP_STRINGS = {
     DESC_CAVE_SOUTH: `This is a tiny cave with entrances west and north, and a dark, forbidding `
         + `staircase leading down.`,
 
-    DESC_ENTRANCE_TO_HADES: `You are outside a large gateway, on which is inscribed\n\n`
-        + `  Abandon every hope all ye who enter here!\n\n`
+    DESC_ENTRANCE_TO_HADES: `You are outside a large gateway, on which is inscribed${cfg.newLineFull}`
+        + `  Abandon every hope all ye who enter here!${cfg.newLineFull}`
         + `The gate is open, through it you can see a desolation, with a pile of mangled bodies in one corner. Thousands `
         + `of voices, lamenting some hideous fate, can be heard.\n`,
 
@@ -967,7 +978,7 @@ const MAP_STRINGS = {
         + `Directly above the bolt is a small green plastic bubble which is glowing serenely.`,
 
     DESC_DAM_LOBBY: `This room appears to have been the waiting room for groups touring the dam.`
-        + `There are open doorways here to the north and east marked \`Private\`, and there is a path leading south over `
+        + `There are open doorways here to the north and east marked "Private", and there is a path leading south over `
         + `the top of the dam.`,
 
     DESC_MAINTENANCE_ROOM: `This is what appears to have been the maintenance room for Flood Control `
@@ -1070,7 +1081,7 @@ const MAP_STRINGS = {
         + `stream enters the lake through a narrow cleft in the rocks. The dam can be seen downstream.`,
 
     DESC_RESERVOIR_EMPTY: `You are on what used to be a large lake, but which is now a large `
-        + `mud pile. There are \`shores\` to the north and south.`,
+        + `mud pile. There are "shores" to the north and south.`,
 
     DESC_RESERVOIR_NORTH: `You are in a large cavernous room, north of a large lake.\nThere is a `
         + `slimy stairway leaving the room to the north.`,
@@ -1103,7 +1114,7 @@ const MAP_STRINGS = {
         + `into a southward path.`,
 
     DESC_SLIDE_ROOM: `This is a small chamber, which appears to have been part of a coal mine. On `
-        + `the south wall of the chamber the letters \`Granite Wall\` are etched in the rock. To the east is a long passage, `
+        + `the south wall of the chamber the letters "Granite Wall" are etched in the rock. To the east is a long passage, `
         + `and there is a steep metal slide twisting downward. To the north is a small opening.`,
 
     DESC_MINE_ENTRANCE: `You are standing at the entrance of what might have been a coal mine. The shaft `
@@ -1145,7 +1156,7 @@ const MAP_STRINGS = {
         + `south is a passageway and to the east a very narrow passage. In the shaft can be seen a heavy iron chain.`,
 
     DESC_MACHINE_ROOM: `This is a large, cold room whose sole exit is to the north. In one corner `
-        + `there is a machine which is reminiscent of a clothes dryer. On its face is a switch which is labelled \`START\`. `
+        + `there is a machine which is reminiscent of a clothes dryer. On its face is a switch which is labelled "START". `
         + `The switch does not appear to be manipulable by any human hand (unless the fingers are about 1/16 by 1/4 inch).`,
 
     DESC_GRATING_ROOM: `You are in a small room near the maze. There are twisty passages in the `
@@ -1301,8 +1312,6 @@ const actions = {
 	"look around": {action: ACTION.LOOK, type: ACTION_TYPE.REFLEXIVE},
 	"look": {action: ACTION.LOOK, type: ACTION_TYPE.REFLEXIVE},
 	"l": {action: ACTION.LOOK, type: ACTION_TYPE.REFLEXIVE},
-	"quit": {action: ACTION.QUIT, type: ACTION_TYPE.REFLEXIVE},
-	"q": {action: ACTION.QUIT, type: ACTION_TYPE.REFLEXIVE},
 	"restart": {action: ACTION.RESTART, type: ACTION_TYPE.REFLEXIVE},
 	"restart game": {action: ACTION.RESTART, type: ACTION_TYPE.REFLEXIVE},
 	"score": {action: ACTION.SCORE, type: ACTION_TYPE.REFLEXIVE},
@@ -1426,367 +1435,367 @@ ACTION_PHRASES.sort((a, b) => b.length - a.length);
 
 const OBJECT_STRINGS = {
 
-	DESC_TUBE: "---> Frobozz Magic Gunk Company <---\n"
-                                         + "          All-Purpose Gunk",
+	DESC_TUBE: `---> Frobozz Magic Gunk Company <---\n`
+                                         + `          All-Purpose Gunk`,
 
     // Initial presence strings
-    INIT_ANCIENT_MAP: "In the trophy case is an ancient parchment which appears to be a map.",
-    INIT_BLACK_BOOK: "On the altar is a large black book, open to page 569.",
-    INIT_BOAT: "There is a folded pile of plastic here which has a small valve attached.",
-    INIT_BOTTLE: "A bottle is sitting on the table.\nThe glass bottle contains:\n  A quantity of water",
-    INIT_BROKEN_CANARY: "There is a golden clockwork canary nestled in the egg. "
-        + "It seems to have recently had a bad experience. The mountings for its jewel-like eyes "
-        + "are empty, and its silver beak is crumpled. Through a cracked crystal window below its "
-        + "left wing you can see the remains of intricate machinery. It is not clear what result "
-        + "winding it would have, as the mainspring seems sprung.",
-    EXAMINE_BROKEN_CANARY: "It seems to have recently had a bad experience. "
-        + "The mountings for its jewel-like eyes are empty, and its silver beak is crumpled. "
-        + "Through a cracked crystal window below its left wing you can see the remains of intricate machinery. "
-        + "It is not clear what result winding it would have, as the mainspring seems sprung.",
-    INIT_GOLDEN_CANARY: "There is a golden clockwork canary nestled in the egg. It has ruby eyes and a "
-        + "silver beak. Through a crystal window below its left wing you can see intricate machinery inside. It appears to have "
-        + "wound down.",
-    EXAMINE_GOLDEN_CANARY: "It has ruby eyes and a silver beak. Through a crystal window below its "
-        + "left wing you can see intricate machinery inside. It appears to have wound down.",
-    INIT_BUOY: "There is a red buoy here (probably a warning).",
-    INIT_CANDLES: "On the two ends of the altar are burning candles.",
-    INIT_COINS: "An old leather bag, bulging with coins, is here.",
-    INIT_EGG: "In the bird's nest is a large egg encrusted with precious jewels, apparently scavenged "
-        + "by a childless songbird. The egg is covered with fine gold inlay, and ornamented in lapis lazuli and "
-        + "mother-of-pearl. Unlike most eggs, this one is hinged and closed with a delicate looking clasp. "
-        + "The egg appears extremely fragile.",
-    INIT_GUIDEBOOK: "Some guidebooks entitled \"Flood Control Dam #3\" are on the reception desk.",
-    INIT_LANTERN: "A battery-powered brass lantern is on the trophy case.",
-    INIT_LEAF_PILE: "On the ground is a pile of leaves.",
-    INIT_MATCHBOOK: "There is a matchbook whose cover says \"Visit Beautiful FCD#3\" here.",
-    INIT_NASTY_KNIFE: "On the table is a nasty-looking knife.",
-    INIT_NEST: "Beside you on the branch is a small bird's nest.",
-    INIT_PAINTING: "Fortunately, there is still one chance for you to be a vandal, "
-        + "for on the far wall is a painting of unparalleled beauty.",
-    INIT_POT_OF_GOLD: "At the end of the rainbow is a pot of gold.",
-    INIT_ROPE: "A large coil of rope is lying in the corner.",
-    INIT_RUSTY_KNIFE: "Beside the skeleton is a rusty knife.",
-    INIT_SACK: "On the table is an elongated brown sack, smelling of hot peppers.",
-    INIT_SCEPTRE: "A sceptre, possibly that of ancient Egypt itself, is in the coffin. The sceptre is "
-        + "ornamented with colored enamel, and tapers to a sharp point.",
-    INIT_SKULL: "Lying in one corner of the room is a beautifully carved crystal skull. It appears "
-        + "to be grinning at you rather nastily.",
-    INIT_SWORD: "Above the trophy case hangs an elvish sword of great antiquity.",
-    INIT_TOOL_CHESTS: "There is a group of tool chests here.",
-    INIT_TORCH: "Sitting on the pedestal is a flaming torch, made of ivory.",
-    INIT_TRIDENT: "On the shore lies Poseidon's own crystal trident.",
-    INIT_USELESS: "The deceased adventurer's useless lantern is here.",
-    INIT_ZORK_MANUAL: "Loosely attached to a wall is a small piece of paper.",
+    INIT_ANCIENT_MAP: `In the trophy case is an ancient parchment which appears to be a map.`,
+    INIT_BLACK_BOOK: `On the altar is a large black book, open to page 569.`,
+    INIT_BOAT: `There is a folded pile of plastic here which has a small valve attached.`,
+    INIT_BOTTLE: `A bottle is sitting on the table.\nThe glass bottle contains:\n  A quantity of water`,
+    INIT_BROKEN_CANARY: `There is a golden clockwork canary nestled in the egg. `
+        + `It seems to have recently had a bad experience. The mountings for its jewel-like eyes `
+        + `are empty, and its silver beak is crumpled. Through a cracked crystal window below its `
+        + `left wing you can see the remains of intricate machinery. It is not clear what result `
+        + `winding it would have, as the mainspring seems sprung.`,
+    EXAMINE_BROKEN_CANARY: `It seems to have recently had a bad experience. `
+        + `The mountings for its jewel-like eyes are empty, and its silver beak is crumpled. `
+        + `Through a cracked crystal window below its left wing you can see the remains of intricate machinery. `
+        + `It is not clear what result winding it would have, as the mainspring seems sprung.`,
+    INIT_GOLDEN_CANARY: `There is a golden clockwork canary nestled in the egg. It has ruby eyes and a `
+        + `silver beak. Through a crystal window below its left wing you can see intricate machinery inside. It appears to have `
+        + `wound down.`,
+    EXAMINE_GOLDEN_CANARY: `It has ruby eyes and a silver beak. Through a crystal window below its `
+        + `left wing you can see intricate machinery inside. It appears to have wound down.`,
+    INIT_BUOY: `There is a red buoy here (probably a warning).`,
+    INIT_CANDLES: `On the two ends of the altar are burning candles.`,
+    INIT_COINS: `An old leather bag, bulging with coins, is here.`,
+    INIT_EGG: `In the bird's nest is a large egg encrusted with precious jewels, apparently scavenged `
+        + `by a childless songbird. The egg is covered with fine gold inlay, and ornamented in lapis lazuli and `
+        + `mother-of-pearl. Unlike most eggs, this one is hinged and closed with a delicate looking clasp. `
+        + `The egg appears extremely fragile.`,
+    INIT_GUIDEBOOK: `Some guidebooks entitled "Flood Control Dam #3" are on the reception desk.`,
+    INIT_LANTERN: `A battery-powered brass lantern is on the trophy case.`,
+    INIT_LEAF_PILE: `On the ground is a pile of leaves.`,
+    INIT_MATCHBOOK: `There is a matchbook whose cover says "Visit Beautiful FCD#3" here.`,
+    INIT_NASTY_KNIFE: `On the table is a nasty-looking knife.`,
+    INIT_NEST: `Beside you on the branch is a small bird's nest.`,
+    INIT_PAINTING: `Fortunately, there is still one chance for you to be a vandal, `
+        + `for on the far wall is a painting of unparalleled beauty.`,
+    INIT_POT_OF_GOLD: `At the end of the rainbow is a pot of gold.`,
+    INIT_ROPE: `A large coil of rope is lying in the corner.`,
+    INIT_RUSTY_KNIFE: `Beside the skeleton is a rusty knife.`,
+    INIT_SACK: `On the table is an elongated brown sack, smelling of hot peppers.`,
+    INIT_SCEPTRE: `A sceptre, possibly that of ancient Egypt itself, is in the coffin. The sceptre is `
+        + `ornamented with colored enamel, and tapers to a sharp point.`,
+    INIT_SKULL: `Lying in one corner of the room is a beautifully carved crystal skull. It appears `
+        + `to be grinning at you rather nastily.`,
+    INIT_SWORD: `Above the trophy case hangs an elvish sword of great antiquity.`,
+    INIT_TOOL_CHESTS: `There is a group of tool chests here.`,
+    INIT_TORCH: `Sitting on the pedestal is a flaming torch, made of ivory.`,
+    INIT_TRIDENT: `On the shore lies Poseidon's own crystal trident.`,
+    INIT_USELESS: `The deceased adventurer's useless lantern is here.`,
+    INIT_ZORK_MANUAL: `Loosely attached to a wall is a small piece of paper.`,
 
 
     // Subsequent presence strings
 
-    BAT_ATTACKS: "\nA large vampire bat, hanging from the ceiling, swoops down at you!"
-        + "\n\nFweep!\nFweep!\nFweep!\n\n\n"
-        + "The bat grabs you by the scruff of your neck and lifts you away....\n\n",
-    BAT_GARLIC: "In the corner of the room on the ceiling is a large vampire bat who is obviously "
-        + "deranged and holding his nose.",
-    BOAT_PUNCTURE: "Oops! Something sharp seems to have slipped and punctured the boat. The boat "
-        + "deflates to the sounds of hissing, sputtering, and cursing.",
-    CANARY_WIND_BAD: "There is an unpleasant grinding noise from inside the canary.",
-    CANARY_WIND_GOOD: "The canary chirps blithely, if somewhat tinnily, for a short time.",
-    CANARY_WIND_BAUBLE: "The canary chirps, slightly off-key, an aria from a forgotten opera. From out "
-        + "of the greenery flies a lovely songbird. It perches on a limb just over your head and opens its beak to sing. As it does "
-        + "so a beautiful brass bauble drops from its mouth, bounces off the top of your head, and lands glimmering in the grass. "
-        + "As the canary winds down, the songbird flies away.",
-    COFFIN: "The solid-gold coffin used for the burial of Ramses II is here.",
-    DIAMOND: "There is an enormous diamond (perfectly cut) here.",
-    JADE: "There is an exquisite jade figurine here.",
-    LEAF_PILE: "On the ground is a pile of leaves.",
-    PAINTING: "A painting by a neglected genius is here.",
-    PLATINUM_BAR: "On the ground is a large platinum bar.",
-    SCEPTRE: "An ornamented sceptre, tapering to a sharp point, is here.",
-    SPIRITS: "The way through the gate is barred by evil spirits, who jeer at your attempts to pass.",
-    TUBE: "There is an object which looks like a tube of toothpaste here.",
+    BAT_ATTACKS: `\nA large vampire bat, hanging from the ceiling, swoops down at you!`
+        + `${cfg.newLineFull}Fweep!\nFweep!\nFweep!${cfg.newLineFull}\n`
+        + `The bat grabs you by the scruff of your neck and lifts you away....${cfg.newLineFull}`,
+    BAT_GARLIC: `In the corner of the room on the ceiling is a large vampire bat who is obviously `
+        + `deranged and holding his nose.`,
+    BOAT_PUNCTURE: `Oops! Something sharp seems to have slipped and punctured the boat. The boat `
+        + `deflates to the sounds of hissing, sputtering, and cursing.`,
+    CANARY_WIND_BAD: `There is an unpleasant grinding noise from inside the canary.`,
+    CANARY_WIND_GOOD: `The canary chirps blithely, if somewhat tinnily, for a short time.`,
+    CANARY_WIND_BAUBLE: `The canary chirps, slightly off-key, an aria from a forgotten opera. From out `
+        + `of the greenery flies a lovely songbird. It perches on a limb just over your head and opens its beak to sing. As it does `
+        + `so a beautiful brass bauble drops from its mouth, bounces off the top of your head, and lands glimmering in the grass. `
+        + `As the canary winds down, the songbird flies away.`,
+    COFFIN: `The solid-gold coffin used for the burial of Ramses II is here.`,
+    DIAMOND: `There is an enormous diamond (perfectly cut) here.`,
+    JADE: `There is an exquisite jade figurine here.`,
+    LEAF_PILE: `On the ground is a pile of leaves.`,
+    PAINTING: `A painting by a neglected genius is here.`,
+    PLATINUM_BAR: `On the ground is a large platinum bar.`,
+    SCEPTRE: `An ornamented sceptre, tapering to a sharp point, is here.`,
+    SPIRITS: `The way through the gate is barred by evil spirits, who jeer at your attempts to pass.`,
+    TUBE: `There is an object which looks like a tube of toothpaste here.`,
 
 
-    ANCIENT_MAP: "The map shows a forest with three clearings. The largest clearing contains a house. "
-        + "Three paths leave the large clearing. One of these paths, leading southwest, is marked \"To Stone Barrow.\"",
-    BAT_CEILING: "You can't reach him, he's on the ceiling.",
-    BELL_RING_SPIRITS: "The bell suddenly becomes red hot and falls to the ground. The wraiths, "
-        + "as if paralyzed, stop their jeering and slowly turn to face you. On their ashen faces, the expression of a "
-        + "long-forgotten terror takes shape.",
-    BLUE_BUTTON: "There is a rumbling sound and a stream of water appears to burst from the east wall "
-        + "of the room (apparently, a leak has occurred in a pipe).",
-    BLUE_BUTTON_JAMMED: "The blue button appears to be jammed.",
-    BLACK_BOOK_BURN: "A booming voice says \"Wrong, cretin!\" and you notice that you have turned into a "
-        + "pile of dust. How, I can't imagine.",
-    BLACK_BOOK_CUT: "The voice of the guardian of the dungeon booms out from the darkness, \"Your disrespect "
-        + "costs you your life!\" and places your head on a sharp pole.",
-    BLACK_BOOK_READ_SPIRITS: "Each word of the prayer reverberates through the hall in a deafening "
-        + "confusion. As the last word fades, a voice, loud and commanding, speaks: \"Begone, fiends!\" A heart-stopping scream "
-        + "fills the cavern, and the spirits, sensing a greater power, flee through the walls.",
-    CANDLES_FALL_SPIRITS: "In your confusion, the candles drop to the ground (and they are out).",
-    CANDLES_LIT_SPIRITS: "The flames flicker wildly and appear to dance. The earth beneath your feet "
-        + "trembles, and your legs nearly buckly beneath you. The spirits cower at your unearthly power.",
-    DEAD_GATE: "The gate is protected by an invisible force. It makes your teeth ache to touch it.",
-    GARLIC_EAT: "What the heck! You won't make friends this way, but nobody around here is too "
-        + "friendly anyhow. Gulp!",
+    ANCIENT_MAP: `The map shows a forest with three clearings. The largest clearing contains a house. `
+        + `Three paths leave the large clearing. One of these paths, leading southwest, is marked "To Stone Barrow."`,
+    BAT_CEILING: `You can't reach him, he's on the ceiling.`,
+    BELL_RING_SPIRITS: `The bell suddenly becomes red hot and falls to the ground. The wraiths, `
+        + `as if paralyzed, stop their jeering and slowly turn to face you. On their ashen faces, the expression of a `
+        + `long-forgotten terror takes shape.`,
+    BLUE_BUTTON: `There is a rumbling sound and a stream of water appears to burst from the east wall `
+        + `of the room (apparently, a leak has occurred in a pipe).`,
+    BLUE_BUTTON_JAMMED: `The blue button appears to be jammed.`,
+    BLACK_BOOK_BURN: `A booming voice says "Wrong, cretin!" and you notice that you have turned into a `
+        + `pile of dust. How, I can't imagine.`,
+    BLACK_BOOK_CUT: `The voice of the guardian of the dungeon booms out from the darkness, "Your disrespect `
+        + `costs you your life!" and places your head on a sharp pole.`,
+    BLACK_BOOK_READ_SPIRITS: `Each word of the prayer reverberates through the hall in a deafening `
+        + `confusion. As the last word fades, a voice, loud and commanding, speaks: "Begone, fiends!" A heart-stopping scream `
+        + `fills the cavern, and the spirits, sensing a greater power, flee through the walls.`,
+    CANDLES_FALL_SPIRITS: `In your confusion, the candles drop to the ground (and they are out).`,
+    CANDLES_LIT_SPIRITS: `The flames flicker wildly and appear to dance. The earth beneath your feet `
+        + `trembles, and your legs nearly buckly beneath you. The spirits cower at your unearthly power.`,
+    DEAD_GATE: `The gate is protected by an invisible force. It makes your teeth ache to touch it.`,
+    GARLIC_EAT: `What the heck! You won't make friends this way, but nobody around here is too `
+        + `friendly anyhow. Gulp!`,
 
 
-    LANTERN_DIM: "The lantern appears a bit dimmer.",
-    LANTERN_DIMMER: "The lantern is definitely dimmer now.",
-    LANTERN_DIMMEST: "The lamp is nearly out.",
-    LANTERN_EXPIRED: "You'd better have more light than from the brass lantern.",
+    LANTERN_DIM: `The lantern appears a bit dimmer.`,
+    LANTERN_DIMMER: `The lantern is definitely dimmer now.`,
+    LANTERN_DIMMEST: `The lamp is nearly out.`,
+    LANTERN_EXPIRED: `You'd better have more light than from the brass lantern.`,
 
-    LUNCH_EAT: "Thank you very much. It really hit the spot.",
-
-
-    MACHINE_FAIL: "The machine doesn't seem to want to do anything.",
-    MACHINE_SUCCESS: "The machine comes to life (figuratively) with a dazzling display of "
-        + "colored lights and bizarre noises. After a few moments, the excitement abates.",
-
-    CARPET_SIT_1: "As you sit, you notice an irregularity underneath it. Rather than be "
-        + "uncomfortable, you stand up again.",
-    CARPET_SIT_2: "I suppose you think it's a magic carpet?",
-    CARPET_LOOK_UNDER: "Underneath the rug is a closed trap door. As you drop the corner "
-        + "of the rug, the trap door is once again concealed from view.",
-
-    HOUSE_EXAMINE: "The house is a beautiful colonial house which is painted white. It is clear "
-        + "that the owners must have been extremely wealthy.",
-
-    ROPE_ON_RAIL: "Hanging down from the railing is a rope which ends about ten feet from the "
-        + " floor below.",
-
-    RUSTY_KNIFE_TAKE: "As you touch the rusty knife, your sword gives a single pulse "
-        + "of blinding blue light.",
-    RUSTY_KNIFE_CURSE: "As the knife approaches its victim, your mind is submerged by "
-        + "an overmastering will. Slowly, your hand turns, until the rusty blade is an inch fromm your neck. "
-        + "The knife seems to sing as it savagely slits your throat.",
-
-    SCEPTRE_WAVE: "A dazzling display of color briefly emanates from the sceptre.",
-    SCEPTRE_RAINBOW: "Suddenly, the rainbow appears to become solid and, I venture, walkable "
-        + "(I think the giveaway was the stairs and bannister.)",
-    SCEPTRE_RAINBOW_1: "The rainbow seems to have become somewhat run-of-the-mill.",
-    SCEPTRE_RAINBOW_2: "The structural integrity of the rainbow is severely compromised, leaving you "
-        + "hanging in mid-air, supported only by water vapor. Bye.",
-    SLAG_CRUMBLE: "The slag was rather insubstantial, and crumbles into dust at your touch.",
-    SKELTON_DISTURBED: "A ghost appears in the room and is appalled at your desecration of the remains "
-        + "of a fellow adventurer. He casts a curse on your valuables and banishes them to the Land of "
-        + " the Living Dead. The ghost leaves, muttering obscenities.",
-    SPIRITS_REVERT: "The tension of this ceremony is broken, and the wraiths, amused but shaken at "
-        + "your clumsy attempt, resume their hideous jeering.",
-    WATER_DRINK: "Thank you very much. I was rather thirsty (from all this talking, probably).",
+    LUNCH_EAT: `Thank you very much. It really hit the spot.`,
 
 
-    CYCLOPS_1: "A cyclops, who looks prepared to eat horses (much less mere adventurers), blocks the staircase. "
-        + "From his state of health, and the bloodstains on the walls, you gather that he is not very friendly, though he likes people.",
-    CYCLOPS_2: "A hungry cyclops is standing at the foot of the stairs.",
-    CYCLOPS_EXAMINE: "The cyclops is standing in the corner, eyeing you closely. I don't think he likes you very "
-        + "much. He looks extremely hungry, even for a cyclops.",
+    MACHINE_FAIL: `The machine doesn't seem to want to do anything.`,
+    MACHINE_SUCCESS: `The machine comes to life (figuratively) with a dazzling display of `
+        + `colored lights and bizarre noises. After a few moments, the excitement abates.`,
+
+    CARPET_SIT_1: `As you sit, you notice an irregularity underneath it. Rather than be `
+        + `uncomfortable, you stand up again.`,
+    CARPET_SIT_2: `I suppose you think it's a magic carpet?`,
+    CARPET_LOOK_UNDER: `Underneath the rug is a closed trap door. As you drop the corner `
+        + `of the rug, the trap door is once again concealed from view.`,
+
+    HOUSE_EXAMINE: `The house is a beautiful colonial house which is painted white. It is clear `
+        + `that the owners must have been extremely wealthy.`,
+
+    ROPE_ON_RAIL: `Hanging down from the railing is a rope which ends about ten feet from the `
+        + ` floor below.`,
+
+    RUSTY_KNIFE_TAKE: `As you touch the rusty knife, your sword gives a single pulse `
+        + `of blinding blue light.`,
+    RUSTY_KNIFE_CURSE: `As the knife approaches its victim, your mind is submerged by `
+        + `an overmastering will. Slowly, your hand turns, until the rusty blade is an inch fromm your neck. `
+        + `The knife seems to sing as it savagely slits your throat.`,
+
+    SCEPTRE_WAVE: `A dazzling display of color briefly emanates from the sceptre.`,
+    SCEPTRE_RAINBOW: `Suddenly, the rainbow appears to become solid and, I venture, walkable `
+        + `(I think the giveaway was the stairs and bannister.)`,
+    SCEPTRE_RAINBOW_1: `The rainbow seems to have become somewhat run-of-the-mill.`,
+    SCEPTRE_RAINBOW_2: `The structural integrity of the rainbow is severely compromised, leaving you `
+        + `hanging in mid-air, supported only by water vapor. Bye.`,
+    SLAG_CRUMBLE: `The slag was rather insubstantial, and crumbles into dust at your touch.`,
+    SKELTON_DISTURBED: `A ghost appears in the room and is appalled at your desecration of the remains `
+        + `of a fellow adventurer. He casts a curse on your valuables and banishes them to the Land of `
+        + ` the Living Dead. The ghost leaves, muttering obscenities.`,
+    SPIRITS_REVERT: `The tension of this ceremony is broken, and the wraiths, amused but shaken at `
+        + `your clumsy attempt, resume their hideous jeering.`,
+    WATER_DRINK: `Thank you very much. I was rather thirsty (from all this talking, probably).`,
 
 
-    CYCLOPS_FLEES: "The cyclops, hearing the name of his father's deadly nemesis, flees the room by knocking down "
-        + "the wall on the east side of the room.",
-
-    CYCLOPS_LISTEN: "You can hear his stomach rumbling.",
-    CYCLOPS_TALK: "The cyclops prefers eating to making conversation.",
-    CYCLOPS_LUNCH_1: "The cyclops says \"Mmm Mmm. I love hot peppers! But oh, could I use a drink. Perhaps I could "
-        + "drink the blood of that thing.\" From the gleam in his eye, it could be surmised that you are \"that thing\".",
-    CYCLOPS_LUNCH_2: "The cyclops, having eaten the hot peppers, appears to be gasping. His enflamed tongue "
-        + "protrudes from his man-sized mouth.",
-    CYCLOPS_DRINK_1: "The cyclops is apparently not thirsty and refuses your generous offer.",
-    CYCLOPS_DRINK_2: "The cyclops takes the bottle, checks that it's open, and drinks the water. A moment later, "
-        + "he lets out a yawn that nearly blows you over, and then falls fast asleep (what did you put in that drink, anyway?)",
-    CYCLOPS_GIVE_REJECT_1: "The cyclops may be hungry, but there is a limit.",
-    CYCLOPS_GIVE_REJECT_2: "The cyclops is not so stupid as to eat THAT!",
-
-    CYCLOPS_SLEEP_1: "The cyclops is sleeping blissfully at the foot of the stairs.",
-    CYCLOPS_SLEEP_2: "The cyclops is sleeping like a baby, albeit a very ugly one.",
-    CYCLOPS_TRAP_DOOR: "The trap door crashes shut, and you hear someone barring it.",
-    CYCLOPS_WAIT_1: "The cyclops seems somewhat agitated.",
-    CYCLOPS_WAIT_2: "The cyclops appears to be getting more agitated.",
-    CYCLOPS_WAIT_3: "The cyclops is moving about the room, looking for something.",
-    CYCLOPS_WAIT_4: "The cyclops was looking for salt and pepper. No doubt they are condiments for his upcoming snack.",
-    CYCLOPS_WAIT_5: "The cyclops is moving toward you in an unfriendly manner.",
-    CYCLOPS_WAIT_6: "You have two choices. 1. Leave 2. Become dinner.",
-    CYCLOPS_WAIT_7: "The cyclops, tired of all your games and trickery, grabs you firmly. As he licks his chops, "
-        + "he says \"Mmm. Just like Mom used to make 'em.\" It's nice to be appreciated.",
-    CYCLOPS_WAKE: "The cyclops yawns and stares at the thing that woke him up.",
-
-    CYCLOPS_SHRUG: "The cyclops shrugs but otherwise ignores your pitiful attempt.",
-    CYCLOPS_FIGHT_MISS_1: "The cyclops misses, but the backwash almost knocks you over.",
-    CYCLOPS_FIGHT_MISS_2: "The cyclops rushes you, but runs into the wall.",
-    CYCLOPS_FIGHT_LIGHT_1: "A quick punch, but it was only a glancing blow.",
-    CYCLOPS_FIGHT_LIGHT_2: "A glancing blow from the cyclops' fist.",
-    CYCLOPS_FIGHT_SEVERE_1: "The monster smashes his huge fist into your chest, breaking several ribs.",
-    CYCLOPS_FIGHT_SEVERE_2: "Heedless of your weapons, the cyclops tosses you against the rock wall of the room.",
-    CYCLOPS_FIGHT_STAGGER_1: "The cyclops almost knocks the wind out of you with a quick punch.",
-    CYCLOPS_FIGHT_STAGGER_2: "The cyclops lands a punch that almost knocks the wind out of you.",
-    CYCLOPS_FIGHT_DISARM_1: "The cyclops graps your WEAPON, tastes it, and throws it to the ground in disgust.",
-    CYCLOPS_FIGHT_DISARM_2: "The monster grabs you on the wrist, squeezes, and you drop your WEAPON in pain.",
-    CYCLOPS_FIGHT_KNOCKOUT: "The cyclops sends you crashing to the floor, unconscious.",
-    CYCLOPS_FIGHT_HESITATE: "The cyclops seems unable to decide whether to broil or stew his dinner.",
-    CYCLOPS_FIGHT_FINISH: "The cyclops, no sportsman, dispatches his unconscious victim.",
-    CYCLOPS_FIGHT_FATAL: "The cyclops breaks your neck with a massive smash.",
-
-    SONGBIRD: "You hear in the distance the chirping of a song bird.",
-    SONGBIRD_NEARBY: "You don't see the song bird, but it's probably somewhere nearby.",
+    CYCLOPS_1: `A cyclops, who looks prepared to eat horses (much less mere adventurers), blocks the staircase. `
+        + `From his state of health, and the bloodstains on the walls, you gather that he is not very friendly, though he likes people.`,
+    CYCLOPS_2: `A hungry cyclops is standing at the foot of the stairs.`,
+    CYCLOPS_EXAMINE: `The cyclops is standing in the corner, eyeing you closely. I don't think he likes you very `
+        + `much. He looks extremely hungry, even for a cyclops.`,
 
 
+    CYCLOPS_FLEES: `The cyclops, hearing the name of his father's deadly nemesis, flees the room by knocking down `
+        + `the wall on the east side of the room.`,
 
+    CYCLOPS_LISTEN: `You can hear his stomach rumbling.`,
+    CYCLOPS_TALK: `The cyclops prefers eating to making conversation.`,
+    CYCLOPS_LUNCH_1: `The cyclops says "Mmm Mmm. I love hot peppers! But oh, could I use a drink. Perhaps I could `
+        + `drink the blood of that thing." From the gleam in his eye, it could be surmised that you are "that thing".`,
+    CYCLOPS_LUNCH_2: `The cyclops, having eaten the hot peppers, appears to be gasping. His enflamed tongue `
+        + `protrudes from his man-sized mouth.`,
+    CYCLOPS_DRINK_1: `The cyclops is apparently not thirsty and refuses your generous offer.`,
+    CYCLOPS_DRINK_2: `The cyclops takes the bottle, checks that it's open, and drinks the water. A moment later, `
+        + `he lets out a yawn that nearly blows you over, and then falls fast asleep (what did you put in that drink, anyway?)`,
+    CYCLOPS_GIVE_REJECT_1: `The cyclops may be hungry, but there is a limit.`,
+    CYCLOPS_GIVE_REJECT_2: `The cyclops is not so stupid as to eat THAT!`,
 
+    CYCLOPS_SLEEP_1: `The cyclops is sleeping blissfully at the foot of the stairs.`,
+    CYCLOPS_SLEEP_2: `The cyclops is sleeping like a baby, albeit a very ugly one.`,
+    CYCLOPS_TRAP_DOOR: `The trap door crashes shut, and you hear someone barring it.`,
+    CYCLOPS_WAIT_1: `The cyclops seems somewhat agitated.`,
+    CYCLOPS_WAIT_2: `The cyclops appears to be getting more agitated.`,
+    CYCLOPS_WAIT_3: `The cyclops is moving about the room, looking for something.`,
+    CYCLOPS_WAIT_4: `The cyclops was looking for salt and pepper. No doubt they are condiments for his upcoming snack.`,
+    CYCLOPS_WAIT_5: `The cyclops is moving toward you in an unfriendly manner.`,
+    CYCLOPS_WAIT_6: `You have two choices. 1. Leave 2. Become dinner.`,
+    CYCLOPS_WAIT_7: `The cyclops, tired of all your games and trickery, grabs you firmly. As he licks his chops, `
+        + `he says "Mmm. Just like Mom used to make 'em." It's nice to be appreciated.`,
+    CYCLOPS_WAKE: `The cyclops yawns and stares at the thing that woke him up.`,
 
-    THIEF_ARRIVES_GRIN: "You feel a light touch, and turning, notice a grinning figure holding a large bag "
-        + "in one hand and a stiletto in the other.",
+    CYCLOPS_SHRUG: `The cyclops shrugs but otherwise ignores your pitiful attempt.`,
+    CYCLOPS_FIGHT_MISS_1: `The cyclops misses, but the backwash almost knocks you over.`,
+    CYCLOPS_FIGHT_MISS_2: `The cyclops rushes you, but runs into the wall.`,
+    CYCLOPS_FIGHT_LIGHT_1: `A quick punch, but it was only a glancing blow.`,
+    CYCLOPS_FIGHT_LIGHT_2: `A glancing blow from the cyclops' fist.`,
+    CYCLOPS_FIGHT_SEVERE_1: `The monster smashes his huge fist into your chest, breaking several ribs.`,
+    CYCLOPS_FIGHT_SEVERE_2: `Heedless of your weapons, the cyclops tosses you against the rock wall of the room.`,
+    CYCLOPS_FIGHT_STAGGER_1: `The cyclops almost knocks the wind out of you with a quick punch.`,
+    CYCLOPS_FIGHT_STAGGER_2: `The cyclops lands a punch that almost knocks the wind out of you.`,
+    CYCLOPS_FIGHT_DISARM_1: `The cyclops graps your WEAPON, tastes it, and throws it to the ground in disgust.`,
+    CYCLOPS_FIGHT_DISARM_2: `The monster grabs you on the wrist, squeezes, and you drop your WEAPON in pain.`,
+    CYCLOPS_FIGHT_KNOCKOUT: `The cyclops sends you crashing to the floor, unconscious.`,
+    CYCLOPS_FIGHT_HESITATE: `The cyclops seems unable to decide whether to broil or stew his dinner.`,
+    CYCLOPS_FIGHT_FINISH: `The cyclops, no sportsman, dispatches his unconscious victim.`,
+    CYCLOPS_FIGHT_FATAL: `The cyclops breaks your neck with a massive smash.`,
 
-    THIEF_GIVE_ITEM: "The thief places the ITEM in his bag and thanks you politely.",
-    THIEF_GIVE_TREASURE: "The thief is taken aback by your unexpected generosity, but accepts the ITEM "
-        + "and stops to admire its beauty.",
-
-    THIEF_HIDEOUT: "You hear a scream of anguish as you violate the robber's hideaway. Using "
-        + "passages unknown to you, he rushes to its defense.",
-
-    THIEF_MAGIC_1: "The thief gestures mysteriously, and the treasures in the room suddenly vanish.",
-    THIEF_MAGIC_2: "As the thief dies, the power of his magic decreases, and his treasures reappear:",
-
-    THIEF_PRESENT_1: "Someone carrying a large bag is casually leaning against one of the walls here. "
-        + "He does not speak, but it is clear from his aspect that the bag will be taken only over his dead body.",
-
-    THIEF_PRESENT_2: "There is a suspicious-looking individual, holding a large bag, leaning against one "
-        + "wall. He is armed with a deadly stiletto.",
-
-    THIEF_PRESENT_UNCONSCIOUS: "There is a suspicious-looking individual lying unconscious on the ground.",
-
-    THIEF_LEAVES_1: "The holder of the large bag just left, looking disgusted. Fortunately, he took nothing.",
-    THIEF_LEAVES_2: "The thief, finding nothing of value, left disgusted.",
-
-    THIEF_LEAVES_ROBS: "The thief just left, still carrying his large bag. You may not have noticed that "
-        + "he robbed you blind first.",
-
-    THIEF_LEAVES_LOOTS: "The thief just left, still carrying his large bag. You may not have noticed that "
-        + "he appropriated the valuables in the room.",
-
-    THIEF_COMES_AND_ROBS: "A seedy-looking individual with a large bag just wandered through the room. On the way "
-        + "through, he quietly abstracted some valuables from the room and from your possession, mumbling something about "
-        + "\"Doing unto others before...\"",
-
-    THIEF_COMES_AND_GOES: "A \"lean and hungry\" gentleman just wandered through, carrying a large bag. "
-        + "Finding nothing of value, he left disgruntled.",
-
-    THIEF_EXAMINE: "The thief is a slippery character with beady eyes, that flit back and forth. He carries, "
-        + "along with an unmistakable arrogance, a large bag over his shoulder and a vicious stiletto, whose blade is aimed menacingly "
-        + "in your direction. I'd watch out if I were you.",
-
-    THIEF_RECOVER_STILETTO: "The robber, somewhat surprised at this turn of events, nimbly retrieves "
-        + "his stiletto.",
-
-    THIEF_WAKES: "The robber revives, briefly feigning continued unconsciousness, and, when he sees his "
-        + "moment, scrambles away from you.",
-
-    THIEF_FIGHT_MISS_1: "The thief stabs nonchalantly with his knife and misses.",
-    THIEF_FIGHT_MISS_2: "You dodge as the thief comes in low.",
-    THIEF_FIGHT_MISS_3: "You parry a lightning thrust, and the thief salutes you with a grim nod.",
-    THIEF_FIGHT_MISS_4: "The thief tries to sneak past your guard, but you twist away.",
-    THIEF_FIGHT_LIGHT_1: "A quick thrust pinks your left arm, and blood starts to trickle down.",
-    THIEF_FIGHT_LIGHT_2: "The thief draws blood, raking his stiletto across your arm.",
-    THIEF_FIGHT_LIGHT_3: "The stiletto flashes faster than you can follow, and blood wells "
-        + "from your leg.",
-    THIEF_FIGHT_LIGHT_4: "The thief slowly approaches, strikes like a snake, and leaves you wounded.",
-    THIEF_FIGHT_SEVERE_1: "The thief strikes like a snake! The resulting wound is serious.",
-    THIEF_FIGHT_SEVERE_2: "The thief stabs a deep cut in your upper arm.",
-    THIEF_FIGHT_SEVERE_3: "The stiletto touches your forehead, and blood obscures your vision.",
-    THIEF_FIGHT_SEVERE_4: "The thief strikes at your wrist, and suddenly your grip is slippery with blood.",
-    THIEF_FIGHT_STAGGER_1: "The butt of his stiletto cracks you on the skull, and you stagger back.",
-    THIEF_FIGHT_STAGGER_2: "The thief rams the haft of his blade into your stomach, leaving you out of breath.",
-    THIEF_FIGHT_STAGGER_3: "The thief attacks, and you fall back desperately.",
-    THIEF_FIGHT_DISARM_1: "A long, theatrical slash. You catch it on your WEAPON, but the thief twists "
-        + "his knife, and the WEAPON goes flying.",
-    THIEF_FIGHT_DISARM_2: "The thief neatly flips your WEAPON out of your hands, and it drops to the floor.",
-    THIEF_FIGHT_DISARM_3: "You parry a low thrust, and your WEAPON slips out of your hand.",
-    THIEF_FIGHT_KNOCKOUT_1: "Shifting in the middle of a thrust, the thief knocks you unconscious "
-        + "with the haft of his stiletto.",
-    THIEF_FIGHT_KNOCKOUT_2: "The thief knocks you out.",
-    THIEF_FIGHT_FATAL_1: "Finishing you off, the thief inserts his blade into your heart.",
-    THIEF_FIGHT_FATAL_2: "The thief comes in from the side, feints, and inserts the blade into your ribs.",
-    THIEF_FIGHT_FATAL_3: "The thief bows formally, raises his stiletto, and with a wry grin, "
-        + "ends the battle and your life.",
-    THIEF_FIGHT_HESITATE_1: "The thief, a man of superior breeding, pauses for a moment to consider the "
-        + "propriety of finishing you off.",
-    THIEF_FIGHT_HESITATE_2: "The thief amuses himself by searching your pockets.",
-    THIEF_FIGHT_HESITATE_3: "The thief entertains himself by rifling your pack.",
-    THIEF_FIGHT_FINISH_1: "The thief, forgetting his essentially genteel upbringing, cuts your throat.",
-    THIEF_FIGHT_FINISH_2: "The thief, a pragmatist, dispatches you as a threat to his livelihood.",
-    THIEF_FIGHT_RETREAT_1: "Your opponent, determining discretion to be the better part of valor, decides to "
-        + "terminate this little contretemps. With a rueful nod of his head, he steps backward into the gloom and disappears.",
-    THIEF_FIGHT_RETREAT_2: "You evidently frightened the robber, though you didn't hit him. He flees "
-        + "the room, but the contents of his bag fall on the floor.",
+    SONGBIRD: `You hear in the distance the chirping of a song bird.`,
+    SONGBIRD_NEARBY: `You don't see the song bird, but it's probably somewhere nearby.`,
 
 
 
-    TROLL_PRESENCE: "A nasty-looking troll, brandishing a bloody axe, blocks all passages out of the room.",
-    TROLL_PRESENCE_UNCONSCIOUS: "An unconscious troll is sprawled on the floor. All passages out of the room are open.",
-    TROLL_PRESENCE_DISARMED: "A pathetically babbling troll is here.",
 
-    TROLL_FEND: "The troll fends you off with a menacing gesture.",
-    TROLL_TALK_1: "The troll isn't much of a conversationalist.",
-    TROLL_TALK_2: "Unfortunately, the troll can't hear you.",
-    TROLL_RECOVER_AXE: "The troll, angered and humiliated, recovers his weapon. He appears to have an axe "
-        + "to grind with you.",
-    TROLL_DISARMED: "The troll, disarmed, cowers in terror, pleading for his life in the guttural tongue "
-        + "of the trolls.",
-    TROLL_RECOVERS_STAGGER: "The troll stirs, quickly resuming a fighting stance.",
-    TROLL_GIVE_AXE: "The troll scratches his head in confusion, then takes the axe.",
-    TROLL_EAT_1: "The troll, who is not overly proud, graciously accepts the gift "
-        + "and eats it hungrily. Poor troll, he dies from an internal hemorrhage and his carcass disappears in "
-        + "a sinister black fog.",
 
-    TROLL_EAT_2: "The troll, who is not overly proud, graciously accepts the gift "
-        + "and, being for the moment sated, throws it back. Fortunately, the troll has poor control, and the ITEM "
-        + "falls to the floor. He does not look pleased.",
+    THIEF_ARRIVES_GRIN: `You feel a light touch, and turning, notice a grinning figure holding a large bag `
+        + `in one hand and a stiletto in the other.`,
 
-    TROLL_EAT_3: "The troll, who is not overly proud, graciously accepts the gift "
-        + "and not having the most discriminating tastes, gleefully eats it.",
+    THIEF_GIVE_ITEM: `The thief places the ITEM in his bag and thanks you politely.`,
+    THIEF_GIVE_TREASURE: `The thief is taken aback by your unexpected generosity, but accepts the ITEM `
+        + `and stops to admire its beauty.`,
 
-    TROLL_TAKE: "The troll spits in your face, grunting \"Better luck next time\" "
-        + "in a rather barbarous accent.",
+    THIEF_HIDEOUT: `You hear a scream of anguish as you violate the robber's hideaway. Using `
+        + `passages unknown to you, he rushes to its defense.`,
 
-    TROLL_LAUGH: "The troll laughs at your puny gesture.",
-    TROLL_TAUNT: "Every so often the troll says something, probably uncomplimentary, "
-        + "in his guttural toungue.",
+    THIEF_MAGIC_1: `The thief gestures mysteriously, and the treasures in the room suddenly vanish.`,
+    THIEF_MAGIC_2: `As the thief dies, the power of his magic decreases, and his treasures reappear:`,
 
-    TROLL_FIGHT_MISS_1: "The troll swings his axe, but it misses.",
-    TROLL_FIGHT_MISS_2: "The troll's axe barely misses your ear.",
-    TROLL_FIGHT_MISS_3: "The axe sweeps past as you jump aside.",
-    TROLL_FIGHT_MISS_4: "The axe crashes against the rock, throwing sparks!",
-    TROLL_FIGHT_MISS_5: "The troll's swing almost knocks you over as you barely parry in time.",
-    TROLL_FIGHT_KNOCKOUT: "The flat of the troll's axe hits you delicately on the head, "
-        + "knocking you out.",
-    TROLL_FIGHT_FATAL_1: "The troll neatly removes your head.",
-    TROLL_FIGHT_FATAL_2: "The troll's axe stroke cleaves you from the nave to the chops.",
-    TROLL_FIGHT_FATAL_3: "The troll's axe removes your head.",
-    TROLL_FIGHT_SEVERE_1: "An axe stroke makes a deep wound in your leg.",
-    TROLL_FIGHT_SEVERE_2: "The troll's axe swings down, gashing your shoulder.",
-    TROLL_FIGHT_SEVERE_3: "The troll swings, the blade turns on your armor but crashes broadside "
-        + "into your head.",
-    TROLL_FIGHT_LIGHT_1: "The flat of the troll's axe skins across your forearm.",
-    TROLL_FIGHT_LIGHT_2: "The troll swings his axe, and it nicks your arm as you dodge.",
-    TROLL_FIGHT_LIGHT_3: "The troll charges, and his axe slashes you on your left arm.",
-    TROLL_FIGHT_LIGHT_4: "The troll charges, and his axe slashes you on your right arm.",
-    TROLL_FIGHT_LIGHT_5: "The axe gets you right in the side. Ouch!",
-    TROLL_FIGHT_STAGGER_1: "The troll hits you with a glancing blow, and you are momentarily stunned.",
-    TROLL_FIGHT_STAGGER_2: "You stagger back under a hail of axe strokes.",
-    TROLL_FIGHT_STAGGER_3: "The troll's mighty blow drops you to your knees.",
-    TROLL_FIGHT_DISARM_1: "The axe hits your WEAPON and knocks it spinning.",
-    TROLL_FIGHT_DISARM_2: "The troll swings, you parry, but the force of his blow knocks your WEAPON away.",
-    TROLL_FIGHT_DISARM_3: "The axe knocks your WEAPON out of your hand. It falls to the floor.",
-    TROLL_FIGHT_HESITATE_1: "The troll hesitates, fingering his axe.",
-    TROLL_FIGHT_HESITATE_2: "The troll scratches his head ruminatively: Might you be magically "
-        + "protected, he wonders?",
-    TROLL_FIGHT_FINISH: "Conquering his fears, the troll puts you to death.",
+    THIEF_PRESENT_1: `Someone carrying a large bag is casually leaning against one of the walls here. `
+        + `He does not speak, but it is clear from his aspect that the bag will be taken only over his dead body.`,
 
-    WOODEN_DOOR: "The engravings translate to \"This space intentionally left blank.\"",
+    THIEF_PRESENT_2: `There is a suspicious-looking individual, holding a large bag, leaning against one `
+        + `wall. He is armed with a deadly stiletto.`,
 
-    WINDOW_EXAMINE_AJAR: "The window is slightly ajar, but not enough to allow entry.",
-    WINDOW_EXAMINE_OPEN: "The kitchen window is open, but I can't tell what's beyond it.",
-    WINDOW_EXAMINE_CLOSED: "The kitchen window is closed.",
-    WINDOW_LOOK_IN: "You can see what appears to be a kitchen.",
-    WINDOW_LOOK_OUT: "You can see a clear area leading towards a forest."
+    THIEF_PRESENT_UNCONSCIOUS: `There is a suspicious-looking individual lying unconscious on the ground.`,
+
+    THIEF_LEAVES_1: `The holder of the large bag just left, looking disgusted. Fortunately, he took nothing.`,
+    THIEF_LEAVES_2: `The thief, finding nothing of value, left disgusted.`,
+
+    THIEF_LEAVES_ROBS: `The thief just left, still carrying his large bag. You may not have noticed that `
+        + `he robbed you blind first.`,
+
+    THIEF_LEAVES_LOOTS: `The thief just left, still carrying his large bag. You may not have noticed that `
+        + `he appropriated the valuables in the room.`,
+
+    THIEF_COMES_AND_ROBS: `A seedy-looking individual with a large bag just wandered through the room. On the way `
+        + `through, he quietly abstracted some valuables from the room and from your possession, mumbling something about `
+        + `"Doing unto others before..."`,
+
+    THIEF_COMES_AND_GOES: `A "lean and hungry" gentleman just wandered through, carrying a large bag. `
+        + `Finding nothing of value, he left disgruntled.`,
+
+    THIEF_EXAMINE: `The thief is a slippery character with beady eyes, that flit back and forth. He carries, `
+        + `along with an unmistakable arrogance, a large bag over his shoulder and a vicious stiletto, whose blade is aimed menacingly `
+        + `in your direction. I'd watch out if I were you.`,
+
+    THIEF_RECOVER_STILETTO: `The robber, somewhat surprised at this turn of events, nimbly retrieves `
+        + `his stiletto.`,
+
+    THIEF_WAKES: `The robber revives, briefly feigning continued unconsciousness, and, when he sees his `
+        + `moment, scrambles away from you.`,
+
+    THIEF_FIGHT_MISS_1: `The thief stabs nonchalantly with his knife and misses.`,
+    THIEF_FIGHT_MISS_2: `You dodge as the thief comes in low.`,
+    THIEF_FIGHT_MISS_3: `You parry a lightning thrust, and the thief salutes you with a grim nod.`,
+    THIEF_FIGHT_MISS_4: `The thief tries to sneak past your guard, but you twist away.`,
+    THIEF_FIGHT_LIGHT_1: `A quick thrust pinks your left arm, and blood starts to trickle down.`,
+    THIEF_FIGHT_LIGHT_2: `The thief draws blood, raking his stiletto across your arm.`,
+    THIEF_FIGHT_LIGHT_3: `The stiletto flashes faster than you can follow, and blood wells `
+        + `from your leg.`,
+    THIEF_FIGHT_LIGHT_4: `The thief slowly approaches, strikes like a snake, and leaves you wounded.`,
+    THIEF_FIGHT_SEVERE_1: `The thief strikes like a snake! The resulting wound is serious.`,
+    THIEF_FIGHT_SEVERE_2: `The thief stabs a deep cut in your upper arm.`,
+    THIEF_FIGHT_SEVERE_3: `The stiletto touches your forehead, and blood obscures your vision.`,
+    THIEF_FIGHT_SEVERE_4: `The thief strikes at your wrist, and suddenly your grip is slippery with blood.`,
+    THIEF_FIGHT_STAGGER_1: `The butt of his stiletto cracks you on the skull, and you stagger back.`,
+    THIEF_FIGHT_STAGGER_2: `The thief rams the haft of his blade into your stomach, leaving you out of breath.`,
+    THIEF_FIGHT_STAGGER_3: `The thief attacks, and you fall back desperately.`,
+    THIEF_FIGHT_DISARM_1: `A long, theatrical slash. You catch it on your WEAPON, but the thief twists `
+        + `his knife, and the WEAPON goes flying.`,
+    THIEF_FIGHT_DISARM_2: `The thief neatly flips your WEAPON out of your hands, and it drops to the floor.`,
+    THIEF_FIGHT_DISARM_3: `You parry a low thrust, and your WEAPON slips out of your hand.`,
+    THIEF_FIGHT_KNOCKOUT_1: `Shifting in the middle of a thrust, the thief knocks you unconscious `
+        + `with the haft of his stiletto.`,
+    THIEF_FIGHT_KNOCKOUT_2: `The thief knocks you out.`,
+    THIEF_FIGHT_FATAL_1: `Finishing you off, the thief inserts his blade into your heart.`,
+    THIEF_FIGHT_FATAL_2: `The thief comes in from the side, feints, and inserts the blade into your ribs.`,
+    THIEF_FIGHT_FATAL_3: `The thief bows formally, raises his stiletto, and with a wry grin, `
+        + `ends the battle and your life.`,
+    THIEF_FIGHT_HESITATE_1: `The thief, a man of superior breeding, pauses for a moment to consider the `
+        + `propriety of finishing you off.`,
+    THIEF_FIGHT_HESITATE_2: `The thief amuses himself by searching your pockets.`,
+    THIEF_FIGHT_HESITATE_3: `The thief entertains himself by rifling your pack.`,
+    THIEF_FIGHT_FINISH_1: `The thief, forgetting his essentially genteel upbringing, cuts your throat.`,
+    THIEF_FIGHT_FINISH_2: `The thief, a pragmatist, dispatches you as a threat to his livelihood.`,
+    THIEF_FIGHT_RETREAT_1: `Your opponent, determining discretion to be the better part of valor, decides to `
+        + `terminate this little contretemps. With a rueful nod of his head, he steps backward into the gloom and disappears.`,
+    THIEF_FIGHT_RETREAT_2: `You evidently frightened the robber, though you didn't hit him. He flees `
+        + `the room, but the contents of his bag fall on the floor.`,
+
+
+
+    TROLL_PRESENCE: `A nasty-looking troll, brandishing a bloody axe, blocks all passages out of the room.`,
+    TROLL_PRESENCE_UNCONSCIOUS: `An unconscious troll is sprawled on the floor. All passages out of the room are open.`,
+    TROLL_PRESENCE_DISARMED: `A pathetically babbling troll is here.`,
+
+    TROLL_FEND: `The troll fends you off with a menacing gesture.`,
+    TROLL_TALK_1: `The troll isn't much of a conversationalist.`,
+    TROLL_TALK_2: `Unfortunately, the troll can't hear you.`,
+    TROLL_RECOVER_AXE: `The troll, angered and humiliated, recovers his weapon. He appears to have an axe `
+        + `to grind with you.`,
+    TROLL_DISARMED: `The troll, disarmed, cowers in terror, pleading for his life in the guttural tongue `
+        + `of the trolls.`,
+    TROLL_RECOVERS_STAGGER: `The troll stirs, quickly resuming a fighting stance.`,
+    TROLL_GIVE_AXE: `The troll scratches his head in confusion, then takes the axe.`,
+    TROLL_EAT_1: `The troll, who is not overly proud, graciously accepts the gift `
+        + `and eats it hungrily. Poor troll, he dies from an internal hemorrhage and his carcass disappears in `
+        + `a sinister black fog.`,
+
+    TROLL_EAT_2: `The troll, who is not overly proud, graciously accepts the gift `
+        + `and, being for the moment sated, throws it back. Fortunately, the troll has poor control, and the ITEM `
+        + `falls to the floor. He does not look pleased.`,
+
+    TROLL_EAT_3: `The troll, who is not overly proud, graciously accepts the gift `
+        + `and not having the most discriminating tastes, gleefully eats it.`,
+
+    TROLL_TAKE: `The troll spits in your face, grunting "Better luck next time" `
+        + `in a rather barbarous accent.`,
+
+    TROLL_LAUGH: `The troll laughs at your puny gesture.`,
+    TROLL_TAUNT: `Every so often the troll says something, probably uncomplimentary, `
+        + `in his guttural toungue.`,
+
+    TROLL_FIGHT_MISS_1: `The troll swings his axe, but it misses.`,
+    TROLL_FIGHT_MISS_2: `The troll's axe barely misses your ear.`,
+    TROLL_FIGHT_MISS_3: `The axe sweeps past as you jump aside.`,
+    TROLL_FIGHT_MISS_4: `The axe crashes against the rock, throwing sparks!`,
+    TROLL_FIGHT_MISS_5: `The troll's swing almost knocks you over as you barely parry in time.`,
+    TROLL_FIGHT_KNOCKOUT: `The flat of the troll's axe hits you delicately on the head, `
+        + `knocking you out.`,
+    TROLL_FIGHT_FATAL_1: `The troll neatly removes your head.`,
+    TROLL_FIGHT_FATAL_2: `The troll's axe stroke cleaves you from the nave to the chops.`,
+    TROLL_FIGHT_FATAL_3: `The troll's axe removes your head.`,
+    TROLL_FIGHT_SEVERE_1: `An axe stroke makes a deep wound in your leg.`,
+    TROLL_FIGHT_SEVERE_2: `The troll's axe swings down, gashing your shoulder.`,
+    TROLL_FIGHT_SEVERE_3: `The troll swings, the blade turns on your armor but crashes broadside `
+        + `into your head.`,
+    TROLL_FIGHT_LIGHT_1: `The flat of the troll's axe skins across your forearm.`,
+    TROLL_FIGHT_LIGHT_2: `The troll swings his axe, and it nicks your arm as you dodge.`,
+    TROLL_FIGHT_LIGHT_3: `The troll charges, and his axe slashes you on your left arm.`,
+    TROLL_FIGHT_LIGHT_4: `The troll charges, and his axe slashes you on your right arm.`,
+    TROLL_FIGHT_LIGHT_5: `The axe gets you right in the side. Ouch!`,
+    TROLL_FIGHT_STAGGER_1: `The troll hits you with a glancing blow, and you are momentarily stunned.`,
+    TROLL_FIGHT_STAGGER_2: `You stagger back under a hail of axe strokes.`,
+    TROLL_FIGHT_STAGGER_3: `The troll's mighty blow drops you to your knees.`,
+    TROLL_FIGHT_DISARM_1: `The axe hits your WEAPON and knocks it spinning.`,
+    TROLL_FIGHT_DISARM_2: `The troll swings, you parry, but the force of his blow knocks your WEAPON away.`,
+    TROLL_FIGHT_DISARM_3: `The axe knocks your WEAPON out of your hand. It falls to the floor.`,
+    TROLL_FIGHT_HESITATE_1: `The troll hesitates, fingering his axe.`,
+    TROLL_FIGHT_HESITATE_2: `The troll scratches his head ruminatively: Might you be magically `
+        + `protected, he wonders?`,
+    TROLL_FIGHT_FINISH: `Conquering his fears, the troll puts you to death.`,
+
+    WOODEN_DOOR: `The engravings translate to "This space intentionally left blank."`,
+
+    WINDOW_EXAMINE_AJAR: `The window is slightly ajar, but not enough to allow entry.`,
+    WINDOW_EXAMINE_OPEN: `The kitchen window is open, but I can't tell what's beyond it.`,
+    WINDOW_EXAMINE_CLOSED: `The kitchen window is closed.`,
+    WINDOW_LOOK_IN: `You can see what appears to be a kitchen.`,
+    WINDOW_LOOK_OUT: `You can see a clear area leading towards a forest.`
 
 };
 

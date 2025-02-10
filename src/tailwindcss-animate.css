@@ -49,117 +49,140 @@
 	--percentage-100: 1;
 
 	@keyframes enter {
-	  from {
-		opacity: var(--tw-enter-opacity, 1);
-		transform: translate3d(
-			var(--tw-enter-translate-x, 0),
-			var(--tw-enter-translate-y, 0),
-			0
-		  )
-		  scale3d(
-			var(--tw-enter-scale, 1),
-			var(--tw-enter-scale, 1),
-			var(--tw-enter-scale, 1)
-		  )
-		  rotate(var(--tw-enter-rotate, 0));
-	  }
+		0% {
+			opacity: var(--tw-enter-opacity, 1);
+			transform: translate3d(
+				var(--tw-enter-translate-x, 0),
+				var(--tw-enter-translate-y, 0),
+				0
+			)
+			scale3d(
+				var(--tw-enter-scale, 1),
+				var(--tw-enter-scale, 1),
+				var(--tw-enter-scale, 1)
+			)
+			rotate(var(--tw-enter-rotate, 0));
+		}
 	}
 
 	@keyframes exit {
-	  to {
-		opacity: var(--tw-exit-opacity, 1);
-		transform: translate3d(
-			var(--tw-exit-translate-x, 0),
-			var(--tw-exit-translate-y, 0),
-			0
-		  )
-		  scale3d(
-			var(--tw-exit-scale, 1),
-			var(--tw-exit-scale, 1),
-			var(--tw-exit-scale, 1)
-		  )
-		  rotate(var(--tw-exit-rotate, 0));
-	  }
+		to {
+			opacity: var(--tw-exit-opacity, 1);
+			transform: translate3d(
+				var(--tw-exit-translate-x, 0),
+				var(--tw-exit-translate-y, 0),
+				0
+			)
+			scale3d(
+				var(--tw-exit-scale, 1),
+				var(--tw-exit-scale, 1),
+				var(--tw-exit-scale, 1)
+			)
+			rotate(var(--tw-exit-rotate, 0));
+		}
 	}
-  }
+}
 
-  /*
-   * Tailwind's default `duration` utility sets the `--tw-duration` variable, so
-   * can set `animation-duration` directly in the animation definition in the
-   * `@theme` section above. Same goes for the `animation-timing-function`, set
-   * with `--tw-ease`.
-   */
-
-  @utility delay-* {
+/*
+* Tailwind's default `duration` utility sets the `--tw-duration` variable, so
+* can set `animation-duration` directly in the animation definition in the
+* `@theme` section above. Same goes for the `animation-timing-function`, set
+* with `--tw-ease`.
+*/
+@utility delay-* {
 	animation-delay: --value([duration]);
 	animation-delay: calc(--value(integer) * 1ms);
-	animation-delay: --value(--animation-delay- *);
-  }
+	animation-delay: --value(--animation-delay-*);
+}
 
-  @utility repeat-* {
-	animation-iteration-count: --value(--animation-repeat- *, integer);
-  }
+@utility repeat-* {
+	animation-iteration-count: --value(--animation-repeat-*, integer);
+}
 
-  @utility direction-* {
-	animation-direction: --value(--animation-direction- *);
-  }
+@utility direction-* {
+	animation-direction: --value(--animation-direction-*);
+}
 
-  @utility fill-mode-* {
-	animation-fill-mode: --value(--animation-fill-mode- *);
-  }
+@utility fill-mode-* {
+	animation-fill-mode: --value(--animation-fill-mode-*);
+}
 
-  @utility running {
+@utility running {
 	animation-play-state: running;
-  }
-  @utility paused {
+}
+@utility paused {
 	animation-play-state: paused;
-  }
+}
 
-  @utility fade-in-* {
-	--tw-enter-opacity: --value(--percentage- *);
-  }
-  @utility fade-out-* {
-	--tw-exit-opacity: --value(--percentage- *);
-  }
+@utility fade-in-* {
+	--tw-enter-opacity: --value(--percentage-*);
+}
+@utility fade-out-* {
+	--tw-exit-opacity: --value(--percentage-*);
+}
 
-  @utility zoom-in-* {
-	--tw-enter-scale: --value(--percentage- *);
-  }
-  @utility zoom-out-* {
-	--tw-exit-scale: --value(--percentage- *);
-  }
+@utility zoom-in-* {
+	--tw-enter-scale: --value(--percentage-*);
+}
+@utility zoom-out-* {
+	--tw-exit-scale: --value(--percentage-*);
+}
 
-  @utility spin-in-* {
+@utility spin-in-* {
 	--tw-enter-rotate: calc(--value(integer) * 1deg);
-	--tw-enter-rotate: --value(--rotate- *, [angle]);
-  }
-  @utility spin-out-* {
+	--tw-enter-rotate: --value(--rotate-*, [angle]);
+}
+@utility spin-out-* {
 	--tw-exit-rotate: calc(--value(integer) * 1deg);
-	--tw-exit-rotate: --value(--rotate- *, [angle]);
-  }
+	--tw-exit-rotate: --value(--rotate-*, [angle]);
+}
 
-  @utility slide-in-from-top-* {
+@utility slide-in-from-top {
+	--tw-exit-translate-y: -100%;
+}
+@utility slide-in-from-top-* {
 	--tw-enter-translate-y: calc(--value([percentage], [length]) * -1);
-  }
-  @utility slide-in-from-bottom-* {
+}
+@utility slide-in-from-bottom {
+	--tw-enter-translate-y: 100%;
+}
+@utility slide-in-from-bottom-* {
 	--tw-enter-translate-y: --value([percentage], [length]);
-  }
-  @utility slide-in-from-left-* {
+}
+@utility slide-in-from-left {
+	--tw-enter-translate-x: -100%;
+}
+@utility slide-in-from-left-* {
 	--tw-enter-translate-x: calc(--value([percentage], [length]) * -1);
-  }
-  @utility slide-in-from-right-* {
+}
+@utility slide-in-from-right {
+	--tw-enter-translate-x: 100%;
+}
+@utility slide-in-from-right-* {
 	--tw-enter-translate-x: --value([percentage], [length]);
-  }
+}
 
-  @utility slide-out-to-top-* {
+@utility slide-out-to-top {
+	--tw-exit-translate-y: -100%;
+}
+@utility slide-out-to-top-* {
 	--tw-exit-translate-y: calc(--value([percentage], [length]) * -1);
-  }
-  @utility slide-out-to-bottom-* {
+}
+@utility slide-out-to-bottom {
+	--tw-exit-translate-y: 100%;
+}
+@utility slide-out-to-bottom-* {
 	--tw-exit-translate-y: --value([percentage], [length]);
-  }
-  @utility slide-out-to-left-* {
+}
+@utility slide-out-to-left {
+	--tw-exit-translate-x: -100%;
+}
+@utility slide-out-to-left-* {
 	--tw-exit-translate-x: calc(--value([percentage], [length]) * -1);
-  }
-  @utility slide-out-to-right-* {
+}
+@utility slide-out-to-right {
+	--tw-exit-translate-x: 100%;
+}
+@utility slide-out-to-right-* {
 	--tw-exit-translate-x: --value([percentage], [length]);
-  }
+}

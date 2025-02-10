@@ -7,8 +7,10 @@ import { getFlash } from "sveltekit-flash-message";
 import { toast } from "svelte-sonner";
 import { Toaster } from "$lib/components/ui/sonner";
 import SuperDebug from "sveltekit-superforms";
-import Header from "$lib/components/sections/Header.svelte";
-import Terminal from "$lib/components/modules/game/Terminal.svelte";
+import Navigation from "$lib/components/sections/Navigation.svelte";
+import TerminalWrapper from "$lib/components/modules/TerminalWrapper.svelte";
+import Achievement from "$lib/components/molecules/Achievement.svelte";
+import Achievements from "$lib/components/modules/Achievements.svelte";
 import { LocalStore } from "$lib/helpers/localStore.svelte.ts";
 import "../app.css";
 
@@ -16,12 +18,18 @@ import "../app.css";
 let { children } = $props();
 
 const flash = getFlash(page);
+const ACHIEVEMENT_DELAY = 5000;
 
 $effect(() => {
 
 	if(!$flash) return;
 
 	switch($flash.type) {
+		case "achievement":
+			toast(Achievement, {
+				duration: ACHIEVEMENT_DELAY,
+			});
+			break;
 		case "success":
 			toast.success($flash.message);
 			break;
@@ -37,10 +45,13 @@ $effect(() => {
 	$flash = undefined;
 });
 
-let siteState = new LocalStore("siteState", {
+let siteState = new LocalStore("siteState",{
+	showAchievements: false,
 	showNavigation: false,
-	saves: {},
-	marks: [],
+});
+
+let saveState = new LocalStore("saveState", {
+	saves: {}
 });
 
 let gameState = $state({
@@ -50,33 +61,66 @@ let gameState = $state({
 	}
 });
 
-let achievementState = $state({
-
+let achievementState = new LocalStore("achievementState", {
+	complete: new Set(),
+	last: null
 });
 
+let achievementCtx = {
+	duration: ACHIEVEMENT_DELAY,
+	fn: {
+		award: () => {}
+	}
+};
+
 let terminalCtx = $state({
+	cmd: undefined,
 	prepend: "",
 	loaded: false
 });
 
+$effect(() => {
+
+	if(Object.keys(achievementState.current.complete).length > 0) {
+
+		if(siteState.current.showAchievements === false) siteState.current.showAchievements = true;
+	}
+});
+
+$effect(() => {
+
+	siteState.current.showNavigation;
+
+	if(terminalCtx?.cmd) {
+		console.log("HAS FIT", typeof terminalCtx.cmd.refs.fitAddon.fit);
+		terminalCtx.cmd.refs.fitAddon.fit();
+	}
+});
+
 setContext("siteState", siteState);
 setContext("gameState", gameState);
+setContext("saveState", saveState);
 setContext("achievementState", achievementState);
+setContext("achievementCtx", achievementCtx);
 setContext("terminalCtx", terminalCtx);
 </script>
 
 <ModeWatcher />
 <Toaster richColors position="bottom-center" />
 
-<div class="relative flex w-screen h-screen">
-	<div class="flex flex-col w-full h-full">
-		<div class="flex-grow">
-			<Terminal />
-		</div>
-		{#if dev}
-			<SuperDebug data={siteState.current} />
+<div class="relative flex flex-col w-screen h-screen">
+	<Achievements />
+	<div class="flex flex-col tb:flex-row w-full h-full">
+		{#if siteState.current.showNavigation}
+			<Navigation />
 		{/if}
+		<div class="flex-grow">
+			<TerminalWrapper />
+		</div>
 	</div>
+	{#if dev}
+		<SuperDebug data={siteState.current} />
+	{/if}
 </div>
 
 {@render children?.()}

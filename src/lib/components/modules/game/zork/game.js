@@ -32,36 +32,36 @@ class Zork extends Game {
 
 		super();
 
+		// necessary vars
 		this.firstRun = false;
 
+		// game objects
+		this.actors = {};
+		this.containers = {};
+		this.features = {};
+		this.items = {};
 		this.passages = {};
 		this.rooms = {};
+		this.surfaces = {};
 		this.world = new Map();
 
-		this.items = {};
-
-		this.features = {};
-		this.containers = {};
-		this.surfaces = {};
-		this.actors = {};
-
-		this.objects = new Map(); // need to load with interactable objects
-		this.objectNameMap = new Map();
+		// config stores
 		this.dictionary = new Set();
-		this.nouns = new Set(); // used in direct validation
+		this.objects = new Map(); // all interactable objects
+		this.objectNameMap = new Map();
 
 		// state validation objects
 		this.ambiguousMap = new Map();
 		this.currentObjects = new Map();
 		this.currentObjectNames = [];
+		this.nouns = new Set(); // used in direct validation
 
-		this.currentInput = "";
-		this.previousInput = "";
-		this.stringLog = "";
+		// state stores
 		this.commandLog = [];
 		this.randomLog = [];
 		this.restoringGame = false;
 
+		// game state
 		this.state = {
 			// gameplay information
 			turns: 0,
@@ -132,6 +132,8 @@ class Zork extends Game {
 			trapDoorOpen: false,
 			winMessageDisplayed: false,
 			yellowButtonPushed: false,
+			// achievement flags
+			firstMovement: false,
 		};
 
 		this.startingState = Object.create(this.state);
@@ -182,13 +184,14 @@ class Zork extends Game {
 
 	init(loadState = { cmds: [], rnds: [] }) {
 
+		// clear the console
+		this.cmd.reset();
+
+		// load our save state into object
 		this.loadState = JSON.parse(JSON.stringify(loadState));
 
 		// default start
 		this.state.playerLocation = LOCATION.WEST_OF_HOUSE;
-
-		// clear the console
-		this.cmd.reset();
 
 		if(this.loadState?.cmds?.length > 0 && this.loadState?.rnds?.length > this.loadState?.cmds?.length) {
 			// This will handle all output
@@ -239,6 +242,7 @@ class Zork extends Game {
 		this.randomLog = rnds;
 
 		this.output("Game restored.");
+		this.cmd.write(cfg.newLine);
 
 		this.resetInput();
 
@@ -2984,6 +2988,12 @@ class Zork extends Game {
 						nextRoom.lookAround();
 					}
 
+					// Triggered the first time a player moves
+					if(this.state.firstMovement === false) {
+						this.state.firstMovement = true;
+						this.award("game-zork-start");
+					}
+
 					if(nextRoom.roomID === "GAS_ROOM"){
 
 						let flameCheck = false;
@@ -4711,7 +4721,7 @@ class Zork extends Game {
 		this.cmd.reset();
 
 		if(this.firstRun === false) {
-			this.cmd.write(cfg.newLineFull);
+			this.cmd.write(cfg.newLine);
 			this.cmd.write(GAME_STRINGS.GAME_BEGIN);
 			this.cmd.write(cfg.newLine);
 			this.firstRun = true;
@@ -4753,5 +4763,5 @@ class Zork extends Game {
 }
 
 export {
-	Zork
+	Zork as default
 };

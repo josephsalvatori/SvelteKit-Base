@@ -70,28 +70,32 @@ export const cfg = {
 	 */
 	visibleCommands: [
 		// output
-		{ match: ["help", "h", "?"], cmd: "help", type: "output", description: `display this help message` },
+		{ match: ["h", "help"], cmd: "help", type: "output", description: `display this help message` },
 		// functions
-		{ match: ["clear", "erase"], cmd: "clear", type: "cmdFn", description: `clear the terminal` },
-		{ match: ["home"], cmd: "home", type: "cmdFn", description: `Home page` },
-		{ match: ["about"], cmd: "about", type: "cmdFn", description: `More about me` },
+		{ match: ["c", "clear"], cmd: "clear", type: "cmdFn", description: `clear the terminal` },
+		{ match: ["n", "nav"], cmd: "nav", type: "cmdFn", description: `show / hide navigation` },
+		{ match: ["hm", "home"], cmd: "home", type: "cmdFn", description: `go to the home page` },
+		{ match: ["ab", "about"], cmd: "about", type: "cmdFn", description: `learn more about me` },
 		// hidden functions
 		{ match: ["init", "reboot"], cmd: "init", type: "hiddenFn", description: `Reboot the terminal` },
+		{ match: ["q", "quit"], cmd: "quit", type: "hiddenFn", description: `Quit actively running game` },
+		{ match: ["s:/"], cmd: "home", type: "hiddenFn", description: `Home page` },
 		// hidden output
 		{ match: ["unknown"], cmd: "unknown", type: "hiddenOutput", description: `Unknown command message` },
 		{ match: ["hello", "hey", "hi", "sup", "wassup"], cmd: "hello", type: "hiddenOutput", description: `Display this help message` },
 		// secondary triggers
-		{ match: ["play"], name: "Play", cmd: "play", type: "secondaryFn", description: `Play <*>` },
+		{ match: ["p", "play"], name: "Play", cmd: "play", type: "secondaryFn", description: `play [GAME]` },
 	],
 	secondaryCommands: [
 		// play "cmd"
 		{ match: ["zork"], name: "Zork", top: "play", cmd: "zork", lvl: "secondaryFn", description: `Play Zork` },
+		{ match: ["planetfall"], name: "Planetfall", top: "play", cmd: "planetfall", lvl: "secondaryFn", description: `Play Planetfall` },
 	],
 	/**
 	 * Process string output to properly split on line width
 	 * @returns
 	 */
-	parseToProperSplits: (text, chars = 40) => {
+	parseToProperSplits: (text, chars = 38) => {
 
 		console.log(text, chars);
 
@@ -126,13 +130,11 @@ export let terminal = {
 
 			command = cfg.visibleCommands.find((cmd) => cmd.match.includes(firstWord));
 
-			// continue commands
+			// continue commands, like `cd` which is not a valid command, but is usually followed by a path
 			if(command === "cd") continue;
 
 			if(command) break;
 		}
-
-		console.log(command);
 
 		if(!command) return false;
 
@@ -142,11 +144,7 @@ export let terminal = {
 			let secondWord = splitCmd[firstWordIndex + 1]?.toLowerCase();
 			let secondCommand = cfg.secondaryCommands.find((cmd) => cmd.match.includes(secondWord));
 
-			console.log("SECONDARY", command);
-
 			if(!secondWord || !secondCommand) return command;
-
-			console.log("SECONDARY CMD", secondCommand);
 
 			return [command, secondCommand];
 		}
@@ -154,7 +152,6 @@ export let terminal = {
 		if(command.type === "output" || command.type === "hiddenOutput") {
 			let txt = this.output[size][command.cmd];
 			if(typeof txt === "object") txt = txt[Math.floor(Math.random() * txt.length)];
-			console.log(typeof txt, txt);
 			return cfg.parseToProperSplits(txt, this.charLimit);
 		}
 
@@ -182,7 +179,7 @@ export let terminal = {
 				`Director of Technology with a focus on${cfg.newLine}` +
 				`digital product strategy and e-commerce${cfg.newLine}` +
 				`currently ${cfg.colors.yellowUnderline}available for consulting work${cfg.colors.reset}.`,
-			help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
+			help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => `  ${cmd.match.join(", ")}${cfg.tab}${cmd.description}`).join(cfg.newLine)}`,
 			hello: [
 				"Hey there!",
 				"Hi!",

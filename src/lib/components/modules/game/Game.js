@@ -1,20 +1,13 @@
-
-
 class Game {
 
-	/**
-	 *	Game class
-	 * @param {import('@battlefieldduck/xterm-svelte').Terminal} cmd The terminal instance
-	 */
 	constructor(cmd) {
 		this.cmd = cmd;
-		console.log("construct game", this);
+		this.award = () => {};
 	}
 
 	preload(callback = () => {}) {
 
 		this.assetLoad().then(() => {
-
 			callback();
 		});
 	}
