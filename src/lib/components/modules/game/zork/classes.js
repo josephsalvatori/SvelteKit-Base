@@ -328,7 +328,6 @@ class GameObject {
 	pour() { this.game.output(this.pourString); }
 	pull() { this.game.output(this.pullString); }
 	push() { this.game.output(this.pushString + this.randPhrase()); }
-	read() { this.game.output(this.readString); }
 	raise() { this.game.output(this.raiseString + this.randPhrase()); }
 	read() { this.game.output(this.readString); }
 	remove() { this.game.output(this.removeString); }

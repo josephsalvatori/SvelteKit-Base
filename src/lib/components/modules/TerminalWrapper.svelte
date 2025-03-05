@@ -35,7 +35,7 @@ let loadedGames = $state({
 	zork: false,
 	planetfall: false,
 });
-let lock = $state(true);
+// let lock = $state(true);
 let lineSize = $derived.by(() => {
 	if(innerWidth.current > 768) return "dk";
 	return "mb";
@@ -53,10 +53,16 @@ async function onLoad(t) {
 	// set up the terminal
 	terminalCtx.cmd.refs?.fitAddon?.fit();
 
+	// lets store some quick refs
+	terminalCtx.cmd.refs.viewport = terminalCtx.cmd._core.element.children[0];
+
 	terminalCtx.size = lineSize;
 	terminalCtx.cmdCfg = cmdCfg;
 	terminalCtx.fn = {
 		reset: resetCmd,
+		forceLock: (bool = true) => {
+			terminalCtx.locked = bool;
+		},
 		updatePrepend: () => {
 			terminalCtx.prepend = (gameState.config.mode !== null) ? "" : `${cfg.colors.black}[S:${page.url.pathname.replace("/", "\\")}]${cfg.colors.reset}`;
 		}
@@ -68,9 +74,16 @@ async function onLoad(t) {
 	terminalCtx.cmd.write(terminal.output[lineSize].init);
 }
 
+function onResize(d) {
+	if(terminalCtx.cmd?.refs?.fitAddon) {
+		terminalCtx.cmd.refs.fitAddon.fit();
+	}
+}
+
 // handle character input
 function onData(o) {
 
+	if(terminalCtx.locked) return;
 	if(cmdCfg.acceptedCharacters.indexOf(o) <= -1) return;
 	if(command.length >= MAX_INPUT_LENGTH) return;
 
@@ -84,18 +97,26 @@ function onData(o) {
 // handle functions
 function onKey({ key, domEvent }) {
 
-	if(lock) return;
+	if(terminalCtx.locked) return;
 
-	// console.log("onKey()", domEvent.key);
+	console.log("onKey()", domEvent.key);
 
 	// Blocked keys
 	if(terminal.disabledKeys.includes(domEvent.key)) return;
 
 	if(domEvent.key === "Backspace") {
-
 		backspace();
-
 		return;
+	}
+
+	if(domEvent.key === "Home") {
+		console.log("Command", command, command.length);
+		terminalCtx.cmd.refs.viewport.scrollTo(0, 0);
+		return;
+	}
+
+	if(domEvent.key === "End") {
+
 	}
 
 	if(domEvent.key === "Enter") {
@@ -110,18 +131,27 @@ function onKey({ key, domEvent }) {
 
 			gameState[game].submitCommand(command, (result) => {
 
+				console.log("RESULT", result);
+
 				let slot = result?.slot || 0;
 
 				if(result.valid === true) {
 
 					let saveObj = saveState.current;
 
-					if(result.cmds) {
-						saveObj.saves[game][slot].cmds = result.cmds;
-					}
+					if(result.state) {
 
-					if(result.rnds) {
-						saveObj.saves[game][slot].rnds = result.rnds;
+						saveObj.saves[game] = result.state;
+
+					} else {
+
+						if(result.cmds) {
+							saveObj.saves[game][slot].cmds = result.cmds;
+						}
+
+						if(result.rnds) {
+							saveObj.saves[game][slot].rnds = result.rnds;
+						}
 					}
 				}
 
@@ -161,18 +191,21 @@ const resetCmd = (full = true, reset = false) => {
 
 	command = "";
 
-	lock = false;
+	terminalCtx.locked = false;
 };
 
 async function prompt() {
 
+	if(command === "" || !terminalCtx.cmd || terminalCtx.locked === true) return;
 
+	terminalCtx.locked = true;
 
-	console.log("prompt()", command);
-
-	if(command === "" || !terminalCtx.cmd || lock === true) return;
-
-	lock = true;
+	// debug achi
+	if(command === "a") {
+		achievementCtx.fn.award("test");
+		resetCmd();
+		return;
+	}
 
 	let cmdOutput = terminal.getOutput(command, lineSize);
 
@@ -262,6 +295,17 @@ async function prompt() {
 				if(!gameState[game]) {
 
 					switch(game) {
+						case "tower":
+
+							if(!loadedGames.tower) {
+								loadedGames.tower = await (import("./game/incremental/game.js"));
+							}
+
+							gameState[game] = new loadedGames.tower.default(cmd);
+
+							if(!saveObj.saves[saveKey]) saveObj.saves[saveKey] = {};
+
+							break;
 						case "zork":
 
 							if(!loadedGames.zork) {
@@ -286,6 +330,7 @@ async function prompt() {
 
 					// run the preload function from the game
 					gameState[game].cmd = terminalCtx.cmd;
+					gameState[game].cmdFn = terminalCtx.fn;
 					gameState[game].award = achievementCtx.fn.award;
 					gameState[game].preload(() => {
 
@@ -321,6 +366,7 @@ async function prompt() {
 			// Navigation items
 			case "home":
 			case "about":
+			case "contact":
 				let pg = cmdRun.cmd === "home" ? "" : cmdRun.cmd;
 				if(page.url.pathname !== `/${pg}`) {
 					goto(`/${pg}`, { keepfocus: true });
@@ -367,6 +413,13 @@ $effect(() => {
 			terminalCtx.cmd.write(terminalCtx.currentPageCopy);
 		}
 
+		if(terminalCtx.currentPageCmd) {
+			command = terminalCtx.currentPageCmd;
+			terminalCtx.currentPageCmd = undefined;
+			prompt();
+			return;
+		}
+
 		terminalCtx.fn.reset();
 		terminalCtx.cmd.focus();
 	}
@@ -378,15 +431,22 @@ afterNavigate(() => {
 });
 </script>
 
-<div class="h-full">
+<div class="h-full bg-black px-[18px]">
 	{#if browser}
-		<Terminal class="h-full" bind:cmd={cmd} options={cmdOpts} {onLoad} {onData} {onKey} />
-		<!-- <Xterm class="h-full" bind:terminal={cmd} options={cmdOpts} {onLoad} {onData} {onKey} /> -->
+		<Terminal class="h-full" bind:cmd={cmd} options={cmdOpts} {onLoad} {onData} {onKey} {onResize} />
 	{/if}
 </div>
 
 <style>
 :global(.xterm-screen) {
-	padding: 0 18px 0 18px;
+	padding: 0;
+}
+
+:global(.xterm .xterm-viewport) {
+	scrollbar-width: none;
+}
+
+:global(.xterm .xterm-viewport)::-webkit-scrollbar {
+	width: 0px;
 }
 </style>

@@ -188,6 +188,10 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+
+	body, html {
+		@apply min-h-full;
+	}
 }
 
 @utility container {

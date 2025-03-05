@@ -1,12 +1,13 @@
 
 export const achRef = {
 	// example
-	// "category-group-name": {
-	// 	title: "",
-	// 	description: "",
-	// 	hint: "",
-	// 	image: "",
-	// },
+	"test": {
+		title: "Dummy Achievement",
+		description: "This is a placeholder for dummy testing. The line length is going test about 80a", // max 80 characters
+		hint: null,
+		image: "https://placehold.co/80",
+		hidden: true
+	},
 	"game-zork-start": {
 		id: "gz01",
 		title: "Start Your Adventure",

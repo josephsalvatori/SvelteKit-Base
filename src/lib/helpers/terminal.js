@@ -68,7 +68,7 @@ export const cfg = {
 	/**
 	 * @param type enum: ["output", "cmdFn", "hiddenOutput", "hiddenFn"]
 	 */
-	visibleCommands: [
+	commands: [
 		// output
 		{ match: ["h", "help"], cmd: "help", type: "output", description: `display this help message` },
 		// functions
@@ -76,6 +76,7 @@ export const cfg = {
 		{ match: ["n", "nav"], cmd: "nav", type: "cmdFn", description: `show / hide navigation` },
 		{ match: ["hm", "home"], cmd: "home", type: "cmdFn", description: `go to the home page` },
 		{ match: ["ab", "about"], cmd: "about", type: "cmdFn", description: `learn more about me` },
+		{ match: ["ct", "contact"], cmd: "contact", type: "cmdFn", description: `contact page` },
 		// hidden functions
 		{ match: ["init", "reboot"], cmd: "init", type: "hiddenFn", description: `Reboot the terminal` },
 		{ match: ["q", "quit"], cmd: "quit", type: "hiddenFn", description: `Quit actively running game` },
@@ -90,6 +91,8 @@ export const cfg = {
 		// play "cmd"
 		{ match: ["zork"], name: "Zork", top: "play", cmd: "zork", lvl: "secondaryFn", description: `Play Zork` },
 		{ match: ["planetfall"], name: "Planetfall", top: "play", cmd: "planetfall", lvl: "secondaryFn", description: `Play Planetfall` },
+		// our game :)
+		{ match: ["game", "the tower", "tower"], name: "The Tower", top: "play", cmd: "tower", lvl: "secondaryFn", description: `Play The Tower` },
 	],
 	/**
 	 * Process string output to properly split on line width
@@ -112,6 +115,53 @@ export const cfg = {
 
 export let terminal = {
 	charLimit: 80,
+	processInput(input) {
+
+		// clean up input
+		input = input.toLowerCase();
+		input = input.replace(/ +/g, " ");
+
+		// if there's special whole string input, do that here...
+		let wholeStringMatch = cfg.commands.find((cmd) => cmd.match.includes(input));
+
+		if(wholeStringMatch) {
+
+			// always return an array
+			return [wholeStringMatch];
+		}
+
+		let firstWordValid = false;
+		let inputWords = input.split(" ");
+		let inputs = [];
+		let inputHasSecondary = false;
+
+		do {
+
+			let word = inputWords.shift();
+
+			if(inputHasSecondary) {
+
+				let secondaryCommand = cfg.secondaryCommands.find((cmd) => cmd.match.includes(word));
+
+				if(secondaryCommand) inputs.push(secondaryCommand);
+
+				continue;
+			}
+
+			let command = cfg.commands.find((cmd) => cmd.match.includes(word));
+
+			if(command?.cmd === "play") inputHasSecondary = true;
+			if(command) {
+				firstWordValid = true;
+				inputs.push(command);
+			}
+
+			if(firstWordValid === false) break;
+
+		} while(inputWords.length > 0);
+
+		return inputs;
+	},
 	getOutput(text, width = "mb") {
 
 		let newText = "HI";
@@ -121,33 +171,20 @@ export let terminal = {
 		// find the first word that's valid
 		let firstWord;
 		let firstWordIndex;
-		let command;
 
-		for(let i = 0; i < splitCmd.length; i++) {
+		// will always return array
+		let commands = this.processInput(text);
 
-			firstWordIndex = i;
-			firstWord = splitCmd[i].toLowerCase();
-
-			command = cfg.visibleCommands.find((cmd) => cmd.match.includes(firstWord));
-
-			// continue commands, like `cd` which is not a valid command, but is usually followed by a path
-			if(command === "cd") continue;
-
-			if(command) break;
+		// Nothing matched
+		if(commands.length <= 0) {
+			return false;
 		}
 
-		if(!command) return false;
+		// if we have multiple commands, kick back to terminal
+		if(commands.length > 1) return commands;
 
-		/** These will run secondary commands */
-		if(command.type === "secondary" || command.type === "secondaryFn") {
-
-			let secondWord = splitCmd[firstWordIndex + 1]?.toLowerCase();
-			let secondCommand = cfg.secondaryCommands.find((cmd) => cmd.match.includes(secondWord));
-
-			if(!secondWord || !secondCommand) return command;
-
-			return [command, secondCommand];
-		}
+		// Our input array has one command
+		let command = commands[0];
 
 		if(command.type === "output" || command.type === "hiddenOutput") {
 			let txt = this.output[size][command.cmd];
@@ -155,11 +192,9 @@ export let terminal = {
 			return cfg.parseToProperSplits(txt, this.charLimit);
 		}
 
-		if(command.type === "cmdFn" || command.type === "hiddenFn") {
+		if(command.type === "cmdFn" || command.type === "hiddenFn" || command.type === "secondaryFn") {
 			return command;
 		}
-
-		console.log("NO MATCH", command);
 
 		return false;
 	},
@@ -179,7 +214,7 @@ export let terminal = {
 				`Director of Technology with a focus on${cfg.newLine}` +
 				`digital product strategy and e-commerce${cfg.newLine}` +
 				`currently ${cfg.colors.yellowUnderline}available for consulting work${cfg.colors.reset}.`,
-			help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => `  ${cmd.match.join(", ")}${cfg.tab}${cmd.description}`).join(cfg.newLine)}`,
+			help: `Available commands:${cfg.newLineFull}` + `${cfg.commands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => `  ${cmd.match.join(", ")}${cfg.tab}${cmd.description}`).join(cfg.newLine)}`,
 			hello: [
 				"Hey there!",
 				"Hi!",
@@ -194,7 +229,7 @@ export let terminal = {
 				`I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, a Milwaukee-based Director of Technology with a focus on${cfg.newLine}` +
 				`digital product strategy and e-commerce currently ${cfg.colors.yellowUnderline}available for consulting work${cfg.colors.reset}.`,
 			// init: `Hello!${cfg.newLineFull}I'm ${cfg.colors.cyanBold}Joseph Salvatori${cfg.colors.reset}, and I've been a director of technology and${cfg.newLine}digital strategist for ${(new Date().getFullYear()) - 2010}+ years with a focus on user experience,${cfg.newLine}e-commerce, and team development.`,
-			help: `Available commands:${cfg.newLineFull}` + `${cfg.visibleCommands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
+			help: `Available commands:${cfg.newLineFull}` + `${cfg.commands.filter(cmd => !["hiddenOutput", "hiddenFn", "secondary"].includes(cmd.type)).map(cmd => ` ${cmd.cmd}${cfg.tabWide}${cmd.description}`).join(cfg.newLine)}`,
 			hello: [
 				"Hey there!",
 				"Hi!",

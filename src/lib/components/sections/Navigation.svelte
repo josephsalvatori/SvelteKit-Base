@@ -11,7 +11,7 @@ let achievementState = getContext("achievementState");
 let siteState = getContext("siteState");
 </script>
 
-<div class="w-full h-full max-h-[80px] min-w-[80px] tb:max-h-full tb:max-w-[80px] justify-center sidebar bg-sidebar border-sidebar-border text-sidebar-foreground">
+<div class="w-full h-full max-h-[80px] min-w-[80px] tb:max-h-full tb:min-h-screen tb:max-w-[80px] justify-center sidebar bg-sidebar border-sidebar-border text-sidebar-foreground">
 	<div class="flex flex-col h-full w-full justify-between p-[16px]">
 		<ul class="flex tb:flex-col gap-[10px]">
 			<li>
@@ -32,7 +32,7 @@ let siteState = getContext("siteState");
 				</li>
 			{/if}
 		</ul>
-		<div class="hidden tb:block">
+		<div class="">
 			<!-- MODE SWITCH? -->
 		</div>
 	</div>

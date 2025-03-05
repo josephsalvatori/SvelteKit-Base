@@ -18,7 +18,7 @@ import "../app.css";
 let { children } = $props();
 
 const flash = getFlash(page);
-const ACHIEVEMENT_DELAY = 5000;
+const ACHIEVEMENT_DELAY = 30000;
 
 $effect(() => {
 
@@ -26,8 +26,10 @@ $effect(() => {
 
 	switch($flash.type) {
 		case "achievement":
-			toast(Achievement, {
+			toast.custom(Achievement, {
+				unstyled: true,
 				duration: ACHIEVEMENT_DELAY,
+				offset: 80
 			});
 			break;
 		case "success":
@@ -76,7 +78,8 @@ let achievementCtx = {
 let terminalCtx = $state({
 	cmd: undefined,
 	prepend: "",
-	loaded: false
+	loaded: false,
+	locked: false,
 });
 
 $effect(() => {
@@ -91,10 +94,14 @@ $effect(() => {
 
 	siteState.current.showNavigation;
 
-	if(terminalCtx?.cmd) {
-		console.log("HAS FIT", typeof terminalCtx.cmd.refs.fitAddon.fit);
-		terminalCtx.cmd.refs.fitAddon.fit();
-	}
+	// if(terminalCtx?.cmd) {
+	// 	console.log("HAS FIT", typeof terminalCtx.cmd.refs.fitAddon.fit);
+	// 	console.log("CTX", terminalCtx.cmd, (document));
+	// 	if(document?.getElementsByClassName("xterm-screen")) {
+	// 		document?.getElementsByClassName("xterm-screen")[0].removeAttribute("style");
+	// 	}
+	// 	terminalCtx.cmd.refs.fitAddon.fit();
+	// }
 });
 
 setContext("siteState", siteState);
@@ -108,9 +115,9 @@ setContext("terminalCtx", terminalCtx);
 <ModeWatcher />
 <Toaster richColors position="bottom-center" />
 
-<div class="relative flex flex-col w-screen h-screen">
+<div class="relative flex flex-col w-full min-h-screen h-full">
 	<Achievements />
-	<div class="flex flex-col tb:flex-row w-full h-full">
+	<div class="flex flex-col tb:flex-row w-full h-full min-h-screen">
 		{#if siteState.current.showNavigation}
 			<Navigation />
 		{/if}
@@ -118,9 +125,9 @@ setContext("terminalCtx", terminalCtx);
 			<TerminalWrapper />
 		</div>
 	</div>
-	{#if dev}
+	<!-- {#if dev}
 		<SuperDebug data={siteState.current} />
-	{/if}
+	{/if} -->
 </div>
 
 {@render children?.()}

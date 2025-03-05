@@ -27,7 +27,26 @@ let {
 	...restProps
 } = $props();
 
+// const encoder = new TextEncoder();
+
+// function connectStreams(instance, term) {
+
+// 	const stdin = instance.stdin?.getWriter();
+
+// 	term.onData(data => stdin?.write(encoder.encode(data)));
+
+// 	instance.stdout.pipeTo(new WritableStream({ write: chunk => term.write(chunk) }));
+// 	instance.stderr.pipeTo(new WritableStream({ write: chunk => term.write(chunk) }));
+// }
+
 onMount(async() => {
+
+	// first, load wasmer
+	// const { Wasmer, init, initializeLogger } = await import("@wasmer/sdk");
+	// const wasmerSDKModule = await import("@wasmer/sdk/wasm-inline");
+	// const wasmerSDKModule = await import("@wasmer/sdk/dist/wasmer_js_bg.wasm");
+
+	// await init({ module: wasmerSDKModule });
 
 	if(typeof Terminal !== "function") {
 		const { Terminal } = await import("@xterm/xterm");
@@ -47,6 +66,12 @@ onMount(async() => {
 	terminal.onScroll((data) => onScroll?.(data));
 	terminal.onSelectionChange(() => onSelectionChange?.());
 	terminal.onTitleChange((data) => onTitleChange?.(data));
+
+	// now merge wasmer pkg
+	// const pkg = await Wasmer.fromRegistry("sharrattj/bash");
+	// const instance = await pkg.entrypoint.run();
+
+	// connectStreams(instance, terminal);
 
 	if(parent) {
 

@@ -9,6 +9,8 @@ let achievementCtx = getContext("achievementCtx");
 
 const flash = getFlash(page);
 
+let audioEl = $state(null);
+
 const award = (name) => {
 
 	if(!achRef[name]) return;
@@ -25,16 +27,28 @@ const award = (name) => {
 
 	// see if we've receieved this achievement already
 	achievementState.current.last = object;
-	achievementState.current.complete[object.id] = object.date;
+
+	if(name !== "test") achievementState.current.complete[object.id] = object.date;
+
+	setTimeout(() => audioEl.play(), 100);
 
 	$flash = {
 		type: "achievement"
 	};
 };
 
+const clear = () => {
+	achievementState.current.last = null;
+};
+
 // achievementState.complete = [];
 achievementCtx.fn = {
-	award
+	award,
+	clear
 };
 
 </script>
+
+<div class="hidden" tabindex="-1">
+	<audio bind:this={audioEl} src="/audio/notication-beep.mp3" preload="auto"></audio>
+</div>

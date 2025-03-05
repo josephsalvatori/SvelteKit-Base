@@ -2,6 +2,7 @@ import Game from "../Game.js";
 import {
 	CONSTANTS
 } from "./constants.js";
+import { cfg } from "$lib/helpers/terminal.js";
 
 class Planetfall extends Game {
 	constructor() {
@@ -147,3 +148,7 @@ class Planetfall extends Game {
 		});
 	}
 }
+
+export {
+	Planetfall as default
+};
